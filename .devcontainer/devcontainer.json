@@ -1,16 +1,12 @@
 {
     "name": "Java",
-    "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
-    "features": {
-        "ghcr.io/devcontainers/features/java:1": {
-            "version": "17"
-        },
-        "docker-in-docker": "latest",
-        "github-cli": "latest"
-    },
+    "dockerComposeFile": "docker-compose.yml",
+    "service": "app",
+    "workspaceFolder": "/workspaces/spring-ai",
+    "postCreateCommand": "java -version",
     "customizations": {},
     "forwardPorts": [
         8080
     ],
-    "remoteUser": "vscode"
+    "remoteUser": "vscode"    
 }
