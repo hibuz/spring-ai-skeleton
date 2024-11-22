@@ -2,11 +2,14 @@
     "name": "Java",
     "dockerComposeFile": "docker-compose.yml",
     "service": "app",
-    "workspaceFolder": "/workspaces/spring-ai",
-    "postCreateCommand": "java -version",
+    "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
     "features": {
+      "ghcr.io/devcontainers/features/java:1": {
+        "version": "17"
+      },
       "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {}
     },
+    "postCreateCommand": "java -version",
     "customizations": {
       "vscode": {
         "extensions": [
@@ -15,9 +18,9 @@
         ]
       }
     },
+    "remoteUser": "vscode",
     "forwardPorts": [
         8080,
         11434
-    ],
-    "remoteUser": "vscode"    
+    ]
 }

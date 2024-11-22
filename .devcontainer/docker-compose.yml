@@ -1,12 +1,10 @@
 services:
   app:
+    # mcr.microsoft.com/devcontainers/java:1-17-bookworm
+    image: mcr.microsoft.com/devcontainers/base:ubuntu
     container_name: javadev
-    #image: mcr.microsoft.com/devcontainers/java:17
     ports:
       - "8080:8080"
-    build: 
-      context: .
-      dockerfile: Dockerfile.dev
     volumes:
       - ..:/workspaces/spring-ai:cached
     # Overrides default command so things don't shut down after the process ends.
