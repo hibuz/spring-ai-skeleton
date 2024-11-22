@@ -4,7 +4,17 @@
     "service": "app",
     "workspaceFolder": "/workspaces/spring-ai",
     "postCreateCommand": "java -version",
-    "customizations": {},
+    "features": {
+      "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {}
+    },
+    "customizations": {
+      "vscode": {
+        "extensions": [
+          "mhutchie.git-graph",
+          "seatonjiang.gitmoji-vscode"
+        ]
+      }
+    },
     "forwardPorts": [
         8080
     ],

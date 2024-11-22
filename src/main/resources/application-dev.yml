@@ -1,0 +1,4 @@
+spring:
+  ai:
+    ollama:
+      base-url: http://ollama:11434/

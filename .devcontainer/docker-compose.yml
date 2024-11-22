@@ -5,9 +5,14 @@ services:
     build: 
       context: .
       dockerfile: Dockerfile.dev
-
     volumes:
       - ..:/workspaces/spring-ai:cached
-      
     # Overrides default command so things don't shut down after the process ends.
     command: sleep infinity
+
+  ollama:
+    hostname: ollama
+    container_name: ollama
+    image: ollama/ollama
+    ports:
+      - "11434:11434"
