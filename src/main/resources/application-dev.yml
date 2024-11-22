@@ -2,3 +2,10 @@ spring:
   ai:
     ollama:
       base-url: http://ollama:11434/
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,beans,conditions
+        exclude: threaddump, heapdump
