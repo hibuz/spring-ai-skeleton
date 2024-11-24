@@ -49,8 +49,8 @@ dependencyManagement {
 }
 
 docker {
-    name 'hibuz/spring-ai'
-	tag 'Dockerhub', "hibuz/spring-ai:${springAiVersion}"
+    name 'ghcr.io/hibuz/spring-ai'
+	tag 'ghcr', "ghcr.io/hibuz/spring-ai:${springAiVersion}"
     dockerfile file('Dockerfile')
     files tasks.bootJar.outputs.files
     buildArgs(['JAR_FILE': tasks.bootJar.outputs.files.singleFile.name])
