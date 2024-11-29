@@ -47,7 +47,7 @@ public class PromptController {
     public Map<String, Generation> system(@RequestParam(value = "adjective", defaultValue = "funny") String adjective,
     @RequestParam(value = "topic", defaultValue = "cows") String topic) {
 
-        log.info("Tell me a {} joke about {}", adjective, topic);
+        log.info("chat> Tell me a {} joke about {}", adjective, topic);
         PromptTemplate promptTemplate = new PromptTemplate("Tell me a {adjective} joke about {topic}");
         Prompt prompt = promptTemplate.create(Map.of("adjective", adjective, "topic", topic));
 
@@ -60,7 +60,7 @@ public class PromptController {
 			@RequestParam(value = "name", defaultValue = "Bob") String name,
 			@RequestParam(value = "voice", defaultValue = "pirate") String voice) {
 
-        log.info("name={}, voice={}", name, voice);
+        log.info("chat> name={}, voice={}", name, voice);
         UserMessage userMessage = new UserMessage(message);
 		SystemPromptTemplate systemPromptTemplate = new SystemPromptTemplate(systemResource);
 		Message systemMessage = systemPromptTemplate.createMessage(Map.of("name", name, "voice", voice));
@@ -74,7 +74,7 @@ public class PromptController {
 			defaultValue = "Which athletes won the mixed doubles gold medal in curling at the 2022 Winter Olympics?'") String message,
 			@RequestParam(value = "stuffit", defaultValue = "false") boolean stuffit) {
 
-        log.info("stuffit={}, message={}", stuffit, message);
+        log.info("chat stuffit={}> {}", stuffit, message);
         PromptTemplate promptTemplate = new PromptTemplate(qaPromptResource);
 		Map<String, Object> map = new HashMap<>();
 		map.put("question", message);
