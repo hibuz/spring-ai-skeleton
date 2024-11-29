@@ -1,5 +1,6 @@
 package com.hibuz.ai.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -28,7 +29,13 @@ public class PromptController {
 
     @Value("classpath:/prompts/system-message.st")
 	private Resource systemResource;
-    
+
+	@Value("classpath:/prompts/qa-prompt.st")
+	private Resource qaPromptResource;
+
+    @Value("classpath:/docs/wikipedia-curling.md")
+	private Resource docsToStuffResource;
+
     private final OllamaChatModel chatModel;
 
     @Autowired
@@ -60,5 +67,25 @@ public class PromptController {
 		Prompt prompt = new Prompt(List.of(userMessage, systemMessage));
 
         return this.chatModel.call(prompt).getResult().getOutput();
+	}
+
+    @GetMapping("/stuff")
+	public String stuff(@RequestParam(value = "message",
+			defaultValue = "Which athletes won the mixed doubles gold medal in curling at the 2022 Winter Olympics?'") String message,
+			@RequestParam(value = "stuffit", defaultValue = "false") boolean stuffit) {
+
+        log.info("stuffit={}, message={}", stuffit, message);
+        PromptTemplate promptTemplate = new PromptTemplate(qaPromptResource);
+		Map<String, Object> map = new HashMap<>();
+		map.put("question", message);
+		if (stuffit) {
+			map.put("context", docsToStuffResource);
+		}
+		else {
+			map.put("context", "");
+		}
+		Prompt prompt = promptTemplate.create(map);
+		Generation generation = this.chatModel.call(prompt).getResult();
+		return generation.getOutput().getContent();
 	}
 }
