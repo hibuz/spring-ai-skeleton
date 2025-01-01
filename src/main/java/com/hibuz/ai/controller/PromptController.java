@@ -12,7 +12,6 @@ import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.chat.prompt.SystemPromptTemplate;
 import org.springframework.ai.ollama.OllamaChatModel;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,7 +37,6 @@ public class PromptController {
 
     private final OllamaChatModel chatModel;
 
-    @Autowired
     public PromptController(OllamaChatModel chatModel) {
         this.chatModel = chatModel;
     }

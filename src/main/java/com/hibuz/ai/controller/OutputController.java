@@ -10,7 +10,6 @@ import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.converter.BeanOutputConverter;
 import org.springframework.ai.converter.ListOutputConverter;
 import org.springframework.ai.ollama.OllamaChatModel;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.convert.support.DefaultConversionService;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,7 +28,6 @@ public class OutputController {
 
     private final OllamaChatModel chatModel;
 
-    @Autowired
     public OutputController(OllamaChatModel chatModel) {
         this.chatModel = chatModel;
     }
