@@ -14,7 +14,8 @@
       "vscode": {
         "extensions": [
           "mhutchie.git-graph",
-          "seatonjiang.gitmoji-vscode"
+          "seatonjiang.gitmoji-vscode",
+          "SonarSource.sonarlint-vscode"
         ]
       }
     },
