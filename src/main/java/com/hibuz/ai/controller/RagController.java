@@ -20,14 +20,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.hibuz.ai.service.BikeJsonReader;
+
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @Slf4j
 public class RagController {
-
-    @Value("classpath:/data/bikes.json")
-	private Resource bikesResource;
 
 	@Value("classpath:/prompts/system-qa.st")
 	private Resource systemBikePrompt;
@@ -36,11 +35,14 @@ public class RagController {
 
     private final EmbeddingModel embeddingModel;
 
+    private final BikeJsonReader bikeJsonReader;
+
     private SimpleVectorStore vectorStore;
 
-    public RagController(ChatModel chatModel, EmbeddingModel embeddingModel) {
+    public RagController(ChatModel chatModel, EmbeddingModel embeddingModel, BikeJsonReader bikeJsonReader) {
         this.chatModel = chatModel;
         this.embeddingModel = embeddingModel;
+        this.bikeJsonReader = bikeJsonReader;
     }
 
     @GetMapping("/rag")
@@ -50,8 +52,7 @@ public class RagController {
         log.info("chat> {}", message);
 
         // Step 1 - Load JSON document as Documents
-		JsonReader jsonReader = new JsonReader(bikesResource, "name", "price", "shortDescription", "description");
-		List<Document> documentList = jsonReader.get();
+		List<Document> documentList = bikeJsonReader.loadJsonAsDocuments();
 
 		// Step 2 - Create embeddings and save to vector store
         if (vectorStore == null) {
