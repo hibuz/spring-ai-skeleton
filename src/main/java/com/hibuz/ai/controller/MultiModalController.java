@@ -18,7 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class MultiModalController {
 
-    @Value("classpath:/data/multimodal.test.png")
+    @Value("classpath:/iamges/multimodal.test.png")
 	private Resource imageResource;
 
     private final ChatModel chatModel;

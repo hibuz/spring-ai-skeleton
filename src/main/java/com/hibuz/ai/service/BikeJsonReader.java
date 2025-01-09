@@ -11,7 +11,7 @@ public class BikeJsonReader {
 
     private final Resource resource;
 
-    BikeJsonReader(@Value("classpath:/data/bikes.json") Resource resource) {
+    BikeJsonReader(@Value("classpath:/docs/bikes.json") Resource resource) {
         this.resource = resource;
     }
 
