@@ -4,12 +4,12 @@ spring:
       base-url: http://ollama:11434/
       init:
         pull-model-strategy: when-missing
-        chat.additional-models:
-          - llama3.2
 
 management:
   endpoints:
     web:
       exposure:
-        include: health,info,beans,conditions
-        exclude: threaddump, heapdump
+        include: health,info,env,beans,conditions
+  endpoint:
+    env:
+      show-values: ALWAYS
