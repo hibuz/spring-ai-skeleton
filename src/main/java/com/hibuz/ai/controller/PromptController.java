@@ -19,11 +19,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 
 @RequestMapping("prompt")
 @RestController
 @Slf4j
+@Tag(name = "step2", description = "Prompts API")
 public class PromptController {
 
     @Value("classpath:/prompts/system-message.st")
@@ -84,6 +86,6 @@ public class PromptController {
 		}
 		Prompt prompt = promptTemplate.create(map);
 		Generation generation = this.chatModel.call(prompt).getResult();
-		return generation.getOutput().getContent();
+		return generation.getOutput().getText();
 	}
 }

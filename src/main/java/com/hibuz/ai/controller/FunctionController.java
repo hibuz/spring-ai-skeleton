@@ -12,11 +12,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.hibuz.ai.service.WeatherService;
 import com.hibuz.ai.service.WeatherService.Unit;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 
 @RequestMapping("func")
 @RestController
 @Slf4j
+@Tag(name = "x.depreacted", description = "Function(-> Tool) Calling API")
 public class FunctionController {
 
     private static final String DEFAULT_VALUE = "What's the weather like in San Francisco, Seoul, and Paris?";

@@ -17,13 +17,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @RequestMapping("output")
 @RestController
 @Slf4j
+@Tag(name = "step3", description = "Structured Output API")
 public class OutputController {
 
     private final OllamaChatModel chatModel;
@@ -46,7 +49,7 @@ public class OutputController {
 		Prompt prompt = promptTemplate.create();
 		Generation generation = this.chatModel.call(prompt).getResult();
 
-		return outputParser.convert(generation.getOutput().getContent());
+		return outputParser.convert(generation.getOutput().getText());
 	}
 
 	@GetMapping("generic")
@@ -83,8 +86,9 @@ public class OutputController {
 	}
 
 	@AllArgsConstructor
+	@NoArgsConstructor
 	@Getter
-	public class ActorsFilms {
+	public static class ActorsFilms {
 		private String actor;
 		private List<String> movies;
 	}
