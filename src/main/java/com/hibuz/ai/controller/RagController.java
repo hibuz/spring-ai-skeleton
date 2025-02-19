@@ -1,19 +1,12 @@
 package com.hibuz.ai.controller;
 
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.springframework.ai.chat.messages.AssistantMessage;
-import org.springframework.ai.chat.messages.Message;
-import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.SystemPromptTemplate;
 import org.springframework.ai.document.Document;
-import org.springframework.ai.embedding.EmbeddingModel;
-import org.springframework.ai.reader.JsonReader;
-import org.springframework.ai.vectorstore.SimpleVectorStore;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,57 +14,63 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hibuz.ai.service.BikeJsonReader;
+import com.hibuz.ai.service.CodeMarkdownReader;
+import com.hibuz.ai.service.RagService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @Slf4j
+@Tag(name = "step5", description = "ETL Pipeline(RAG-Retrieval Augmented Generation use case) API")
 public class RagController {
 
-	@Value("classpath:/prompts/system-qa.st")
+	@Value("classpath:/prompts/system-qa-bike.st")
 	private Resource systemBikePrompt;
+
+	@Value("classpath:/prompts/system-qa-code.st")
+	private Resource systemCodePrompt;
+
+    private final RagService ragService;
 
     private final ChatModel chatModel;
 
-    private final EmbeddingModel embeddingModel;
-
     private final BikeJsonReader bikeJsonReader;
 
-    private SimpleVectorStore vectorStore;
+    private final CodeMarkdownReader CodeMarkdownReader;
 
-    public RagController(ChatModel chatModel, EmbeddingModel embeddingModel, BikeJsonReader bikeJsonReader) {
+    public RagController(RagService ragService, ChatModel chatModel, BikeJsonReader bikeJsonReader, CodeMarkdownReader CodeMarkdownReader) {
+        this.ragService = ragService;
         this.chatModel = chatModel;
-        this.embeddingModel = embeddingModel;
         this.bikeJsonReader = bikeJsonReader;
+        this.CodeMarkdownReader = CodeMarkdownReader;
     }
 
-    @GetMapping("/rag")
-	public AssistantMessage rag(@RequestParam(value = "message",
+    @GetMapping("/rag/bike")
+	public AssistantMessage queryBike(@RequestParam(value = "message",
              defaultValue = "What bike is good for city commuting?") String message) {
 
         log.info("chat> {}", message);
 
-        // Step 1 - Load JSON document as Documents
 		List<Document> documentList = bikeJsonReader.loadJsonAsDocuments();
-
-		// Step 2 - Create embeddings and save to vector store
-        if (vectorStore == null) {
-            vectorStore = new SimpleVectorStore(embeddingModel);
-            vectorStore.add(documentList);
-        }
-
-		// Step 3 retrieve related documents to query
-		List<Document> similarDocuments = this.vectorStore.similaritySearch(message);
-        log.info("found {} similar documents", similarDocuments.size());
-        String documents = similarDocuments.stream().map(entry -> entry.getContent()).collect(Collectors.joining("\n"));
-
-		// Step 4 Embed documents into SystemMessage with the `system-qa.st` prompt template
         SystemPromptTemplate systemPromptTemplate = new SystemPromptTemplate(systemBikePrompt);
-		Message systemMessage = systemPromptTemplate.createMessage(Map.of("documents", documents));
-		Message userMessage = new UserMessage(message);
 
-		// Step 5 - Ask the AI model
-		Prompt prompt = new Prompt(List.of(systemMessage, userMessage));
+        Prompt prompt = ragService.createSimilaritySearchPrompt(documentList, message, systemPromptTemplate);
+
+		return chatModel.call(prompt).getResult().getOutput();
+    }
+
+    @GetMapping("/rag/code")
+	public AssistantMessage queryCode(@RequestParam(value = "message",
+             defaultValue = "Show me the spring ai example") String message) {
+
+        log.info("chat> {}", message);
+
+		List<Document> documentList = CodeMarkdownReader.loadMarkdown();
+        SystemPromptTemplate systemPromptTemplate = new SystemPromptTemplate(systemCodePrompt);
+
+        Prompt prompt = ragService.createSimilaritySearchPrompt(documentList, message, systemPromptTemplate);
+
 		return chatModel.call(prompt).getResult().getOutput();
     }
 }
