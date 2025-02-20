@@ -1,8 +1,6 @@
-version: '3.4'
-
 services:
   springai:
-    image: springai
+    image: ghcr.io/hibuz/spring-ai
     build:
       context: .
       dockerfile: ./Dockerfile
