@@ -1,4 +1,4 @@
-# Spring AI [![build status](https://github.com/hibuz/spring-ai-skeleton/actions/workflows/continuous-integration.yml/badge.svg)](https://github.com/hibuz/spring-ai-skeleton/actions/workflows/continuous-integration.yml)
+# Spring AI [![build status](https://github.com/hibuz/spring-ai-skeleton/actions/workflows/gradle.yml/badge.svg)](https://github.com/hibuz/spring-ai-skeleton/actions/workflows/gradle.yml)
 
 The Spring AI skeleton project provides a Spring-friendly API and abstractions for developing AI applications.
 
@@ -73,7 +73,7 @@ To build the final jar and optimize the example application for production, run:
 ```
 ./gradlew docker
 
-docker run --rm -it -p 8080:8080 --name spring-tmp hibuz/spring-ai
+docker run --rm -it -p 8080:8080 --name spring-tmp ghcr.io/hibuz/spring-ai
 ```
 
 To ensure everything worked, run:
@@ -84,7 +84,7 @@ docker compose up
 
 ## Project Links
 
-* [Swagger](http://localhost:8080/swagger-ui/index.html)
+* [Swagger](http://localhost:8080/ai/swagger-ui/index.html)
 * [Issues](https://github.com/spring-projects/spring-ai/issues)
 <!-- * [Discussions](https://github.com/spring-projects/spring-ai/discussions) - Go here if you have a question, suggestion, or feedback! -->
 
