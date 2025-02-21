@@ -30,7 +30,7 @@ public class FunctionController {
     }
 
     @GetMapping("bean")
-    public ChatResponse bean(@RequestParam(value = "message", defaultValue = DEFAULT_VALUE) String message) {
+    public ChatResponse bean(@RequestParam(defaultValue = DEFAULT_VALUE) String message) {
         log.info("chat> {}", message);
 
         return ChatClient.create(chatModel).prompt(message)
@@ -39,7 +39,7 @@ public class FunctionController {
     }
 
     @GetMapping("callback/function-invoke")
-    public ChatResponse func(@RequestParam(value = "message", defaultValue = DEFAULT_VALUE) String message) {
+    public ChatResponse func(@RequestParam(defaultValue = DEFAULT_VALUE) String message) {
         log.info("chat> {}", message);
         FunctionCallback callback = FunctionCallback.builder()
             .function("currentWeather", (WeatherService.Request request) ->

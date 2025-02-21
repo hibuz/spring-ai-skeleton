@@ -30,8 +30,7 @@ public class MultiModalController {
     }
 
     @GetMapping("/image")
-	public ChatResponse rag(@RequestParam(value = "message",
-             defaultValue = "Explain what do you see on this picture?") String message) {
+	public ChatResponse rag(@RequestParam(defaultValue = "Explain what do you see on this picture?") String message) {
 
         log.info("chat> {}", message);
 

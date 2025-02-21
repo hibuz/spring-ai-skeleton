@@ -47,8 +47,7 @@ public class RagController {
     }
 
     @GetMapping("/rag/bike")
-	public AssistantMessage queryBike(@RequestParam(value = "message",
-             defaultValue = "What bike is good for city commuting?") String message) {
+	public AssistantMessage queryBike(@RequestParam(defaultValue = "What bike is good for city commuting?") String message) {
 
         log.info("chat> {}", message);
 
@@ -61,8 +60,7 @@ public class RagController {
     }
 
     @GetMapping("/rag/code")
-	public AssistantMessage queryCode(@RequestParam(value = "message",
-             defaultValue = "Show me the spring ai example") String message) {
+	public AssistantMessage queryCode(@RequestParam(defaultValue = "Show me the spring ai example") String message) {
 
         log.info("chat> {}", message);
 

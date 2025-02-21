@@ -32,7 +32,7 @@ public class ChatController implements InfoContributor {
     }
 
     @GetMapping("/generate")
-    public Map<String, String> generate(@RequestParam(value = "message", defaultValue = "Tell me a joke") String message) {
+    public Map<String, String> generate(@RequestParam(defaultValue = "Tell me a joke") String message) {
         log.info("chat message={}", message);
         return Map.of("generation", this.chatModel.call(message));
     }

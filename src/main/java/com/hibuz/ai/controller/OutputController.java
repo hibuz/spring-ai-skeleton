@@ -36,7 +36,7 @@ public class OutputController {
     }
 
 	@GetMapping("convert")
-	public ActorsFilms convertor(@RequestParam(value = "actor", defaultValue = "Jeff Bridges") String actor) {
+	public ActorsFilms convertor(@RequestParam(defaultValue = "Jeff Bridges") String actor) {
 		var outputParser = new BeanOutputConverter<>(ActorsFilms.class);
 
 		String format = outputParser.getFormat();
@@ -53,7 +53,7 @@ public class OutputController {
 	}
 
 	@GetMapping("generic")
-	public List<ActorsFilms> generic(@RequestParam(value = "actor", defaultValue = "Tom Hanks and Bill Murray") String actor) {
+	public List<ActorsFilms> generic(@RequestParam(defaultValue = "Tom Hanks and Bill Murray") String actor) {
 		String userMessage = "Generate the filmography of 5 movies for {actor}.";
 		log.info("chat> {}", userMessage.replace("{actor}", actor));
 		PromptTemplate promptTemplate = new PromptTemplate(userMessage, Map.of("actor", actor));
@@ -64,7 +64,7 @@ public class OutputController {
 	}
 
 	@GetMapping("map")
-	public Map<String, Object> map(@RequestParam(value = "subject", defaultValue = "an array of numbers from 1 to 9 under they key name 'numbers'") String subject) {
+	public Map<String, Object> map(@RequestParam(defaultValue = "an array of numbers from 1 to 9 under they key name 'numbers'") String subject) {
 		String text = "Provide me a List of {subject}";
 		log.info("chat> {}", text.replace("{subject}", subject));
 
@@ -75,7 +75,7 @@ public class OutputController {
 	}
 
 	@GetMapping("list")
-	public List<String> list(@RequestParam(value = "subject", defaultValue = "ice cream flavors") String subject) {
+	public List<String> list(@RequestParam(defaultValue = "ice cream flavors") String subject) {
 		String text = "List five {subject}";
 		log.info("chat> {}", text.replace("{subject}", subject));
 
