@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.prompt.ChatOptions;
+import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.stereotype.Service;
 
 import com.hibuz.ai.constant.ModelType;
@@ -33,6 +34,14 @@ public class ChatClientService {
         this.client = ChatClient.builder(chatModel).build();
 
         this.modelMap = modelList.stream().collect(Collectors.toMap(m1 -> ModelType.valueOf(m1), m2 -> m2));
+    }
+
+    public String chat(String userMessage) {
+        return chat(new Prompt(userMessage));
+    }
+
+    public String chat(Prompt prompt) {
+        return client.prompt(prompt).call().content();
     }
 
     public void changeChatModel(String modelTypeName, String modelName) {

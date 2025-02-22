@@ -1,17 +1,13 @@
 package com.hibuz.ai.controller;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.ai.chat.messages.AssistantMessage;
 import org.springframework.ai.chat.messages.Message;
 import org.springframework.ai.chat.messages.UserMessage;
-import org.springframework.ai.chat.model.Generation;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.chat.prompt.SystemPromptTemplate;
-import org.springframework.ai.ollama.OllamaChatModel;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.hibuz.ai.service.ChatClientService;
+
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 
@@ -37,35 +36,36 @@ public class PromptController {
     @Value("classpath:/docs/wikipedia-curling.md")
 	private Resource docsToStuffResource;
 
-    private final OllamaChatModel chatModel;
+    private final ChatClientService service;
 
-    public PromptController(OllamaChatModel chatModel) {
-        this.chatModel = chatModel;
+    public PromptController(ChatClientService service) {
+        this.service = service;
     }
 
     @GetMapping("/template")
-    public Map<String, Generation> system(@RequestParam(defaultValue = "funny") String adjective, @RequestParam(defaultValue = "cows") String topic) {
+	@Operation(summary = "system prompt template : Tell me a {adjective} joke about {topic}")
+    public String template(@RequestParam(defaultValue = "funny") String adjective, @RequestParam(defaultValue = "cows") String topic) {
 
         log.info("chat> Tell me a {} joke about {}", adjective, topic);
         PromptTemplate promptTemplate = new PromptTemplate("Tell me a {adjective} joke about {topic}");
         Prompt prompt = promptTemplate.create(Map.of("adjective", adjective, "topic", topic));
 
-        return Map.of("generation", this.chatModel.call(prompt).getResult());
+        return service.chat(prompt);
     }
 
     @GetMapping("/roles")
-	public AssistantMessage generate(@RequestParam(
+	public String roles(@RequestParam(
 			defaultValue = "Tell me about three famous pirates from the Golden Age of Piracy and why they did.  Write at least a sentence for each pirate.") String message,
 			@RequestParam(defaultValue = "Bob") String name,
 			@RequestParam(defaultValue = "pirate") String voice) {
 
         log.info("chat> name={}, voice={}", name, voice);
         UserMessage userMessage = new UserMessage(message);
-		SystemPromptTemplate systemPromptTemplate = new SystemPromptTemplate(rolePrompt);
-		Message systemMessage = systemPromptTemplate.createMessage(Map.of("name", name, "voice", voice));
+		SystemPromptTemplate template = new SystemPromptTemplate(rolePrompt);
+		Message systemMessage = template.createMessage(Map.of("name", name, "voice", voice));
 		Prompt prompt = new Prompt(List.of(userMessage, systemMessage));
 
-        return this.chatModel.call(prompt).getResult().getOutput();
+        return service.chat(prompt);
 	}
 
     @GetMapping("/stuff")
@@ -73,17 +73,9 @@ public class PromptController {
 			@RequestParam(defaultValue = "false") boolean stuffit) {
 
         log.info("chat stuffit={}> {}", stuffit, message);
-        PromptTemplate promptTemplate = new PromptTemplate(qnaPrompt);
-		Map<String, Object> map = new HashMap<>();
-		map.put("question", message);
-		if (stuffit) {
-			map.put("context", docsToStuffResource);
-		}
-		else {
-			map.put("context", "");
-		}
-		Prompt prompt = promptTemplate.create(map);
-		Generation generation = this.chatModel.call(prompt).getResult();
-		return generation.getOutput().getText();
+        PromptTemplate template = new PromptTemplate(qnaPrompt);
+		Prompt prompt = template.create(Map.of("question", message, "context", stuffit ? docsToStuffResource : ""));
+
+		return service.chat(prompt);
 	}
 }
