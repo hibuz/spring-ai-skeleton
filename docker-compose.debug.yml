@@ -1,11 +1,7 @@
 services:
-  springai:
-    image: ghcr.io/hibuz/spring-ai
-    build:
-      context: .
-      dockerfile: ./Dockerfile
+  spring-ai:
     environment:
       JAVA_OPTS: -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005,quiet=y
     ports:
-      - 8080:8080
+      - 8080:8888
       - 5005:5005

@@ -1,15 +1,15 @@
 services:
-  springai:
+  spring-ai:
     image: ghcr.io/hibuz/spring-ai
+    container_name: spring-ai
     build:
       context: .
       dockerfile: ./Dockerfile
     ports:
-      - 8080:8080
+      - 8888:8080
 
   ollama:
-    hostname: ollama
-    container_name: ollama
     image: ollama/ollama
+    container_name: ollama
     ports:
-      - "11434:11434"
+      - 11435:11434
