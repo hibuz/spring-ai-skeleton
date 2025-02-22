@@ -1,20 +1,27 @@
 services:
   spring-ai-dev:
-    # mcr.microsoft.com/devcontainers/java:1-17-bookworm
     image: mcr.microsoft.com/devcontainers/base:ubuntu
     container_name: spring-ai-dev
     depends_on:
       - ollama-dev
     ports:
-      - "8080:8080"
+      - 8080:8080
     volumes:
       - ..:/workspaces/spring-ai:cached
     # Overrides default command so things don't shut down after the process ends.
     command: sleep infinity
+
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:${WEBUI_DOCKER_TAG-main}
+    container_name: open-webui
+    depends_on:
+      - ollama-dev
+    ports:
+      - ${OPEN_WEBUI_PORT-3000}:8080
 
   ollama-dev:
     hostname: ollama
     container_name: ollama-dev
     image: ollama/ollama
     ports:
-      - "11434:11434"
+      - 11434:11434

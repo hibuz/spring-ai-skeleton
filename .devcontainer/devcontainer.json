@@ -20,11 +20,11 @@
       }
     },
     "hostRequirements": {
-      "cpus": 4,
-      "memory": "16gb"
+      "cpus": 4
     },
     "remoteUser": "vscode",
     "forwardPorts": [
+        3000,
         8080,
         11434
     ]
