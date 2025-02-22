@@ -28,11 +28,11 @@ import lombok.extern.slf4j.Slf4j;
 @Tag(name = "step2", description = "Prompts API")
 public class PromptController {
 
-    @Value("classpath:/prompts/system-message.st")
-	private Resource systemResource;
+    @Value("classpath:/prompts/role-prompt.st")
+	private Resource rolePrompt;
 
-	@Value("classpath:/prompts/qa-prompt.st")
-	private Resource qaPromptResource;
+	@Value("classpath:/prompts/qna-prompt.st")
+	private Resource qnaPrompt;
 
     @Value("classpath:/docs/wikipedia-curling.md")
 	private Resource docsToStuffResource;
@@ -61,7 +61,7 @@ public class PromptController {
 
         log.info("chat> name={}, voice={}", name, voice);
         UserMessage userMessage = new UserMessage(message);
-		SystemPromptTemplate systemPromptTemplate = new SystemPromptTemplate(systemResource);
+		SystemPromptTemplate systemPromptTemplate = new SystemPromptTemplate(rolePrompt);
 		Message systemMessage = systemPromptTemplate.createMessage(Map.of("name", name, "voice", voice));
 		Prompt prompt = new Prompt(List.of(userMessage, systemMessage));
 
@@ -73,7 +73,7 @@ public class PromptController {
 			@RequestParam(defaultValue = "false") boolean stuffit) {
 
         log.info("chat stuffit={}> {}", stuffit, message);
-        PromptTemplate promptTemplate = new PromptTemplate(qaPromptResource);
+        PromptTemplate promptTemplate = new PromptTemplate(qnaPrompt);
 		Map<String, Object> map = new HashMap<>();
 		map.put("question", message);
 		if (stuffit) {

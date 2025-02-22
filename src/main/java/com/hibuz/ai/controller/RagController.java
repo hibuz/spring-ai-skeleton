@@ -25,11 +25,11 @@ import lombok.extern.slf4j.Slf4j;
 @Tag(name = "step5", description = "ETL Pipeline(RAG-Retrieval Augmented Generation use case) API")
 public class RagController {
 
-	@Value("classpath:/prompts/system-qa-bike.st")
-	private Resource systemBikePrompt;
+	@Value("classpath:/prompts/qna-bike.st")
+	private Resource qnaBikePrompt;
 
-	@Value("classpath:/prompts/system-qa-code.st")
-	private Resource systemCodePrompt;
+	@Value("classpath:/prompts/qna-code.st")
+	private Resource qnaCodePrompt;
 
     private final RagService ragService;
 
@@ -37,13 +37,13 @@ public class RagController {
 
     private final BikeJsonReader bikeJsonReader;
 
-    private final CodeMarkdownReader CodeMarkdownReader;
+    private final CodeMarkdownReader codeMarkdownReader;
 
-    public RagController(RagService ragService, ChatModel chatModel, BikeJsonReader bikeJsonReader, CodeMarkdownReader CodeMarkdownReader) {
+    public RagController(RagService ragService, ChatModel chatModel, BikeJsonReader bikeJsonReader, CodeMarkdownReader codeMarkdownReader) {
         this.ragService = ragService;
         this.chatModel = chatModel;
         this.bikeJsonReader = bikeJsonReader;
-        this.CodeMarkdownReader = CodeMarkdownReader;
+        this.codeMarkdownReader = codeMarkdownReader;
     }
 
     @GetMapping("/rag/bike")
@@ -52,7 +52,7 @@ public class RagController {
         log.info("chat> {}", message);
 
 		List<Document> documentList = bikeJsonReader.loadJsonAsDocuments();
-        SystemPromptTemplate systemPromptTemplate = new SystemPromptTemplate(systemBikePrompt);
+        SystemPromptTemplate systemPromptTemplate = new SystemPromptTemplate(qnaBikePrompt);
 
         Prompt prompt = ragService.createSimilaritySearchPrompt(documentList, message, systemPromptTemplate);
 
@@ -64,8 +64,8 @@ public class RagController {
 
         log.info("chat> {}", message);
 
-		List<Document> documentList = CodeMarkdownReader.loadMarkdown();
-        SystemPromptTemplate systemPromptTemplate = new SystemPromptTemplate(systemCodePrompt);
+		List<Document> documentList = codeMarkdownReader.loadMarkdown();
+        SystemPromptTemplate systemPromptTemplate = new SystemPromptTemplate(qnaCodePrompt);
 
         Prompt prompt = ragService.createSimilaritySearchPrompt(documentList, message, systemPromptTemplate);
 
