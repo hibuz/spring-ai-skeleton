@@ -26,7 +26,8 @@ repositories {
 }
 
 ext {
-	set('springAiVersion', "1.0.0-M6")
+	set('springAiVersion', '1.0.0-M6')
+	set('dockerImage', 'ghcr.io/hibuz/spring-ai')
 }
 
 dependencies {
@@ -50,13 +51,13 @@ dependencyManagement {
 }
 
 docker {
-    name 'ghcr.io/hibuz/spring-ai'
-	tag 'ghcr', "ghcr.io/hibuz/spring-ai:${springAiVersion}"
-    dockerfile file('Dockerfile')
-    files tasks.bootJar.outputs.files
-    buildArgs(['JAR_FILE': tasks.bootJar.outputs.files.singleFile.name])
-    pull true
-    noCache true
+	name "${dockerImage}"
+	tag('ghcr', "${dockerImage}")
+	dockerfile file('Dockerfile')
+	files tasks.bootJar.outputs.files
+	buildArgs(['JAR_FILE': tasks.bootJar.outputs.files.singleFile.name])
+	pull true
+	noCache true
 }
 
 tasks.named('test') {
