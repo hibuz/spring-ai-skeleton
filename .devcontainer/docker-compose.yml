@@ -1,8 +1,10 @@
 services:
-  app:
+  spring-ai-dev:
     # mcr.microsoft.com/devcontainers/java:1-17-bookworm
     image: mcr.microsoft.com/devcontainers/base:ubuntu
-    container_name: javadev
+    container_name: spring-ai-dev
+    depends_on:
+      - ollama-dev
     ports:
       - "8080:8080"
     volumes:
@@ -10,9 +12,9 @@ services:
     # Overrides default command so things don't shut down after the process ends.
     command: sleep infinity
 
-  ollama:
+  ollama-dev:
     hostname: ollama
-    container_name: ollama
+    container_name: ollama-dev
     image: ollama/ollama
     ports:
       - "11434:11434"
