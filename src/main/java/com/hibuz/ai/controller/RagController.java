@@ -13,16 +13,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.hibuz.ai.service.BikeJsonReader;
-import com.hibuz.ai.service.CodeMarkdownReader;
 import com.hibuz.ai.service.RagService;
+import com.hibuz.ai.util.BikeJsonReader;
+import com.hibuz.ai.util.CodeMarkdownReader;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @Slf4j
-@Tag(name = "step5", description = "ETL Pipeline(RAG-Retrieval Augmented Generation use case) API")
+@Tag(name = "step6", description = "ETL Pipeline(RAG-Retrieval Augmented Generation use case) API")
 public class RagController {
 
 	@Value("classpath:/prompts/qna-bike.st")

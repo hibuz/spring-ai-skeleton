@@ -18,7 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @Slf4j
-@Tag(name = "step4", description = "Multimodality API")
+@Tag(name = "step5", description = "Multimodality API")
 public class MultiModalController {
 
     @Value("classpath:/images/multimodal.test.png")

@@ -1,4 +1,4 @@
-package com.hibuz.ai.service;
+package com.hibuz.ai.util;
 
 import java.util.List;
 

@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.client.ChatClient.Builder;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.prompt.ChatOptions;
 import org.springframework.ai.chat.prompt.Prompt;
@@ -36,6 +37,10 @@ public class ChatClientService {
         this.modelMap = modelList.stream().collect(Collectors.toMap(m1 -> ModelType.valueOf(m1), m2 -> m2));
     }
 
+    public Builder builder() {
+        return ChatClient.builder(modelMap.get(modelType)).defaultOptions(chatOptions);
+    }
+
     public String chat(String userMessage) {
         return chat(new Prompt(userMessage));
     }
@@ -50,7 +55,7 @@ public class ChatClientService {
 
         this.modelType = newType;
         this.chatOptions = ChatOptions.builder().model(modelName).temperature(chatOptions.getTemperature()).build();
-        this.client = ChatClient.builder(modelMap.get(newType)).defaultOptions(chatOptions).build();
+        this.client = builder().build();
 
         log.info("ChatClient chaneged! {} -> {}({})", oldType, newType, chatOptions.getModel());
     }
