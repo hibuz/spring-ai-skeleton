@@ -2,8 +2,13 @@ package com.hibuz.ai.controller;
 
 import java.util.Map;
 
+import org.springframework.ai.chat.messages.Message;
+import org.springframework.ai.chat.prompt.Prompt;
+import org.springframework.ai.chat.prompt.PromptTemplate;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.info.Info.Builder;
 import org.springframework.boot.actuate.info.InfoContributor;
+import org.springframework.core.io.Resource;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -13,7 +18,6 @@ import com.hibuz.ai.service.ChatClientService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,6 +27,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Slf4j
 @Tag(name = "step1", description = "Chat Client API")
 public class ChatController implements InfoContributor {
+
+	@Value("classpath:/prompts/qna-korean-only.st")
+	private Resource qnaPrompt;
 
     private final ChatClientService service;
 
@@ -50,8 +57,18 @@ public class ChatController implements InfoContributor {
     }
 
     @GetMapping("/generate")
-    public Map<String, String> generate(@RequestParam(defaultValue = "Tell me a joke") String message) {
+    public Map<String, String> generate(@RequestParam(defaultValue = "Tell me a joke") String message, @RequestParam(defaultValue = "true") boolean korean) {
         log.info("chat> {}", message);
-        return Map.of("generation", this.service.getClient().prompt(message).call().content());
+
+        Prompt prompt;
+        if (korean) {
+            PromptTemplate template = new PromptTemplate(qnaPrompt);
+            Message promptMessage = template.createMessage(Map.of("question", message));
+            prompt = new Prompt(promptMessage);
+        } else {
+            prompt = new Prompt(message);
+        }
+
+        return Map.of("generation", service.chat(prompt));
     }
 }
