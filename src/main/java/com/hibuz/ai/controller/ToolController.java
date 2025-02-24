@@ -3,6 +3,7 @@ package com.hibuz.ai.controller;
 import java.lang.reflect.Method;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.tool.ToolCallback;
@@ -12,7 +13,6 @@ import org.springframework.ai.tool.definition.ToolDefinition;
 import org.springframework.ai.tool.function.FunctionToolCallback;
 import org.springframework.ai.tool.method.MethodToolCallback;
 import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,7 +22,6 @@ import com.hibuz.ai.service.ChatClientService;
 import com.hibuz.ai.util.WeatherTools;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 
@@ -74,10 +73,10 @@ public class ToolController {
     }
 
     @GetMapping("method")
-    public ChatResponse method(@RequestParam(defaultValue = "What's the weather like in Seoul, Paris and San Francisco?") String message) {
+    public ChatResponse method(@RequestParam(defaultValue = "What's the weather like in Seoul, Paris and San Francisco? in Fahrenheit") String message) {
         log.info("chat> {}", message);
 
-        Method method = ReflectionUtils.findMethod(WeatherTools.class, "getWeatherStatic");
+        Method method = Arrays.stream(WeatherTools.class.getMethods()).filter(m -> "getWeatherStatic".equals(m.getName())).findFirst().get();
 
         ToolCallback toolCallback = MethodToolCallback.builder()
             .toolDefinition(ToolDefinition.builder(method)
