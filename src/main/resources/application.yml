@@ -6,7 +6,7 @@ spring:
     name: ai
   ai:
     ollama:
-      base-url: http://localhost:11434/
+      base-url: http://ollama:11434/
       chat:
         options:
           model: llama3.2

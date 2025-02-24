@@ -6,10 +6,10 @@ services:
       context: .
       dockerfile: ./Dockerfile
     ports:
-      - 8888:8080
+      - "8888:8080"
 
   ollama:
     image: ollama/ollama
     container_name: ollama
     ports:
-      - 11435:11434
+      - "11435:11434"

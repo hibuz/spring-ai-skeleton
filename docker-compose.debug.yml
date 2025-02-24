@@ -3,5 +3,5 @@ services:
     environment:
       JAVA_OPTS: -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005,quiet=y
     ports:
-      - 8080:8888
-      - 5005:5005
+      - "8080:8888"
+      - "5005:5005"
