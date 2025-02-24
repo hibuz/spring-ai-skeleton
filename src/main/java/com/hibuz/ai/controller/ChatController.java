@@ -1,5 +1,6 @@
 package com.hibuz.ai.controller;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.ai.chat.messages.Message;
@@ -69,6 +70,9 @@ public class ChatController implements InfoContributor {
             prompt = new Prompt(message);
         }
 
-        return Map.of("generation", service.chat(prompt));
+        Map<String, String> result = new HashMap<>();
+        result.put("generation", service.chat(prompt));
+
+        return result;
     }
 }
