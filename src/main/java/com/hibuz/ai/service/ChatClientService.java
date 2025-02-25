@@ -19,7 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 public class ChatClientService {
-    private Map<ModelType, ChatModel> modelMap;
+    private final Map<ModelType, ChatModel> modelMap;
 
     private ModelType modelType;
 
@@ -34,7 +34,7 @@ public class ChatClientService {
         this.chatOptions = chatModel.getDefaultOptions();
         this.client = ChatClient.builder(chatModel).build();
 
-        this.modelMap = modelList.stream().collect(Collectors.toMap(m1 -> ModelType.valueOf(m1), m2 -> m2));
+        this.modelMap = modelList.stream().collect(Collectors.toMap(ModelType::valueOf, m2 -> m2));
     }
 
     public Builder builder() {
@@ -57,7 +57,7 @@ public class ChatClientService {
         this.chatOptions = ChatOptions.builder().model(modelName).temperature(chatOptions.getTemperature()).build();
         this.client = builder().build();
 
-        log.info("ChatClient chaneged! {} -> {}({})", oldType, newType, chatOptions.getModel());
+        log.info("ChatClient changed! {} -> {}({})", oldType, newType, chatOptions.getModel());
     }
 
     public Map<String, Object> getModelInfo() {
