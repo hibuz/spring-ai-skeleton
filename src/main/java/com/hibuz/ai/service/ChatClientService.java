@@ -9,6 +9,7 @@ import org.springframework.ai.chat.client.ChatClient.Builder;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.prompt.ChatOptions;
 import org.springframework.ai.chat.prompt.Prompt;
+import org.springframework.ai.embedding.EmbeddingModel;
 import org.springframework.stereotype.Service;
 
 import com.hibuz.ai.constant.ModelType;
@@ -21,6 +22,9 @@ import lombok.extern.slf4j.Slf4j;
 public class ChatClientService {
     private final Map<ModelType, ChatModel> modelMap;
 
+    @Getter
+    private final EmbeddingModel embeddingModel;
+
     private ModelType modelType;
 
     private ChatOptions chatOptions;
@@ -28,13 +32,14 @@ public class ChatClientService {
     @Getter
     private ChatClient client;
 
-    ChatClientService(List<ChatModel> modelList) {
+    ChatClientService(List<ChatModel> modelList, EmbeddingModel embeddingModel) {
         ChatModel chatModel = modelList.get(0);
         this.modelType = ModelType.valueOf(chatModel);
         this.chatOptions = chatModel.getDefaultOptions();
         this.client = ChatClient.builder(chatModel).build();
 
         this.modelMap = modelList.stream().collect(Collectors.toMap(ModelType::valueOf, m2 -> m2));
+        this.embeddingModel = embeddingModel;
     }
 
     public Builder builder() {
