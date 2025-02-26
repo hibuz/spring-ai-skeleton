@@ -10,6 +10,7 @@ import org.springframework.ai.document.Document;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,12 +18,15 @@ import com.hibuz.ai.service.RagService;
 import com.hibuz.ai.util.BikeJsonReader;
 import com.hibuz.ai.util.CodeMarkdownReader;
 
+import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 
+@RequestMapping("rag")
 @RestController
 @Slf4j
-@Tag(name = "step6", description = "ETL Pipeline(RAG-Retrieval Augmented Generation use case) API")
+@Tag(name = "step6. 검색 증강 생성 with 문서벡터 ETL", externalDocs = @ExternalDocumentation(description = "Retrieval Augmented Generation",
+    url = "https://docs.spring.io/spring-ai/reference/concepts.html#concept-rag"))
 public class RagController {
 
 	@Value("classpath:/prompts/qna-bike.st")
@@ -46,7 +50,7 @@ public class RagController {
         this.codeMarkdownReader = codeMarkdownReader;
     }
 
-    @GetMapping("/rag/bike")
+    @GetMapping("/bike")
 	public AssistantMessage queryBike(@RequestParam(defaultValue = "What bike is good for city commuting?") String message) {
 
         log.info("chat> {}", message);
@@ -59,7 +63,7 @@ public class RagController {
 		return chatModel.call(prompt).getResult().getOutput();
     }
 
-    @GetMapping("/rag/code")
+    @GetMapping("/code")
 	public AssistantMessage queryCode(@RequestParam(defaultValue = "Show me the spring ai example") String message) {
 
         log.info("chat> {}", message);

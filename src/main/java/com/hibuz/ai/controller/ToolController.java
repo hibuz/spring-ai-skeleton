@@ -21,14 +21,17 @@ import org.springframework.web.bind.annotation.RestController;
 import com.hibuz.ai.service.ChatClientService;
 import com.hibuz.ai.util.WeatherTools;
 
+import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 
 @RequestMapping("tool")
 @RestController
 @Slf4j
-@Tag(name = "step4", description = "Tool Calling API")
+@Tag(name = "step4. 어플리케이션 도구와 연결(정보조회, 기능수행)", externalDocs = @ExternalDocumentation(description = "Tool Calling API",
+    url = "https://docs.spring.io/spring-ai/reference/concepts.html#concept-fc"))
 public class ToolController {
 
     private final ChatClientService service;
@@ -39,7 +42,11 @@ public class ToolController {
 
     @GetMapping("object")
     @Operation(summary = "Information Retrieval & Taking Actions(Can you set an alarm 10 minutes from now?)")
-    public ChatResponse object(@RequestParam(defaultValue = "What day is today?") String message) {
+    public ChatResponse object(
+    @Schema(description = "해적의 황금시대의 유명한 해적 3명과 그들이 왜 그랬는지 말해주세요. 각 해적에 대해 최소한 한 문장을 쓰세요.",
+                                defaultValue = "Tell me about three famous pirates from the Golden Age of Piracy and why they did." +
+                                    "Write at least a sentence for each pirate.")
+    @RequestParam(defaultValue = "What day is today?") String message) {
         log.info("chat> {}", message);
         /**
          * ToolCallback[] dateTimeTools = ToolCallbacks.from(new DateTimeTools());

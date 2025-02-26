@@ -35,11 +35,9 @@ You can find more details in the [Reference Documentation](https://docs.spring.i
 * Support for [Chat Conversation Memory](https://docs.spring.io/spring-ai/reference/api/chatclient.html#_chat_memory) and [Retrieval Augmented Generation (RAG)](https://docs.spring.io/spring-ai/reference/api/chatclient.html#_retrieval_augmented_generation).
 * Spring Boot Auto Configuration and Starters for all AI Models and Vector Stores - use the [start.spring.io](https://start.spring.io/) to select the Model or Vector-store of choice.
 
-## Breaking changes
-- 
 
 ## Getting Started
-
+![OpenAI API Compatibility](https://docs.spring.io/spring-ai/reference/_images/spring-ai-ollama-over-openai.jpg)
 Please refer to the [Getting Started Guide](https://docs.spring.io/spring-ai/reference/getting-started.html) for instruction on adding your dependencies.
 
 ## Quickstart

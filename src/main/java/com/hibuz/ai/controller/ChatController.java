@@ -2,6 +2,7 @@ package com.hibuz.ai.controller;
 
 import java.util.Map;
 
+import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.actuate.info.Info.Builder;
@@ -20,7 +21,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 @RestController
 @Slf4j
-@Tag(name = "step1", description = "Chat Client API")
+@Tag(name = "step1. 채팅응답 생성", externalDocs = @ExternalDocumentation(description = "Chat Client API",
+    url = "https://docs.spring.io/spring-ai/reference/api/chatclient.html#_chatclient_responses"))
 public class ChatController implements InfoContributor {
 
     private final ChatClientService service;

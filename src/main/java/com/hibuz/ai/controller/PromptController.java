@@ -28,7 +28,8 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("prompt")
 @RestController
 @Slf4j
-@Tag(name = "step2", description = "Prompts API")
+@Tag(name = "step2. 시스템 프롬프트 템플릿", externalDocs = @ExternalDocumentation(description = "Prompts API",
+    url = "https://docs.spring.io/spring-ai/reference/api/prompt.html"))
 public class PromptController {
 
     @Value("classpath:/prompts/role-prompt.st")
@@ -50,7 +51,8 @@ public class PromptController {
     }
 
     @GetMapping("/template")
-	@Operation(summary = "1", description = "system prompt template : Tell me a {adjective} joke about {topic}", externalDocs = @ExternalDocumentation(url = "https://news.hada.io/topic?id=13379"))
+	@Operation(summary = "1", description = "system prompt template : Tell me a {adjective} joke about {topic}",
+       externalDocs = @ExternalDocumentation(description = "ChatGPT의 '시스템 프롬프트'", url = "https://news.hada.io/topic?id=13379"))
     public String template(@RequestParam(defaultValue = "funny") String adjective, @RequestParam(defaultValue = "cows") String topic) {
 
         log.info("chat> Tell me a {} joke about {}", adjective, topic);
@@ -68,7 +70,6 @@ public class PromptController {
             @RequestParam String message,
 			@RequestParam(defaultValue = "Bob") String name,
 			@RequestParam(defaultValue = "pirate") String voice) {
-
         log.info("chat> name={}, voice={}", name, voice);
         UserMessage userMessage = new UserMessage(message);
 		SystemPromptTemplate template = new SystemPromptTemplate(rolePrompt);
@@ -81,9 +82,8 @@ public class PromptController {
     @GetMapping("/korean")
     @Operation(summary = "3")
     public Map<String, String> korean(@RequestParam(defaultValue = "What is the most important reason to learn AI in one sentence?") String message,
-                                      @Schema(example = "If the following sentence contains a lot of English words, " +
-                                              "translate it into very natural Korean.")
-                                      @RequestParam(required = false) String translateTemplate,
+                                      @RequestParam(required = false, defaultValue = "If the following sentence contains a lot of English words," +
+                                        "translate it into very natural Korean.") String translateTemplate,
                                       @RequestParam(defaultValue = "false") boolean useQnaPromptForKorean) {
 
         log.info("chat> {}", message);

@@ -17,12 +17,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.hibuz.ai.service.ChatClientService;
 
+import io.swagger.v3.oas.annotations.ExternalDocumentation;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @Slf4j
-@Tag(name = "step5", description = "Multimodality API")
+@Tag(name = "step5. 멀티모달리티(텍스트, 이미지, 오디오 등)", externalDocs = @ExternalDocumentation(description = "Multimodality API",
+    url = "https://docs.spring.io/spring-ai/reference/api/multimodality.html#_spring_ai_multimodality"))
 public class MultiModalController {
 
     @Value("classpath:/images/multimodal.test.png")
@@ -35,13 +38,14 @@ public class MultiModalController {
     }
 
     @GetMapping("/embedding")
+    @Operation(externalDocs = @ExternalDocumentation(description = "Embeddings", url = "https://docs.spring.io/spring-ai/reference/concepts.html#_embeddings"))
     public Map<String, EmbeddingResponse> embed(@RequestParam(defaultValue = "Tell me a joke") String message) {
         EmbeddingResponse embeddingResponse = service.getEmbeddingModel().embedForResponse(List.of(message));
         return Map.of("embedding", embeddingResponse);
     }
 
     @GetMapping("/image")
-	public ChatResponse image(@RequestParam(defaultValue = "Explain what do you see on this picture?") String message) {
+	public ChatResponse image(@RequestParam(defaultValue = "Explain what do you see in this picture?") String message) {
 
         log.info("chat> {}", message);
 

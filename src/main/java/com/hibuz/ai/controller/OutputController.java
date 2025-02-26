@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,7 +27,8 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("output")
 @RestController
 @Slf4j
-@Tag(name = "step3", description = "Structured Output API")
+@Tag(name = "step3. 구조화된 출력 구성", externalDocs = @ExternalDocumentation(description = "Structured Output API",
+	url = "https://docs.spring.io/spring-ai/reference/concepts.html#_structured_output"))
 public class OutputController {
 
     private final OllamaChatModel chatModel;
