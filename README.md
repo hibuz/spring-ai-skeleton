@@ -40,6 +40,18 @@ You can find more details in the [Reference Documentation](https://docs.spring.i
 ![OpenAI API Compatibility](https://docs.spring.io/spring-ai/reference/_images/spring-ai-ollama-over-openai.jpg)
 Please refer to the [Getting Started Guide](https://docs.spring.io/spring-ai/reference/getting-started.html) for instruction on adding your dependencies.
 
+## Prerequisites - Ollama
+
+- Install Ollama on your local machine : https://ollama.com
+- Run `ollama run qwen2.5:1.5b`
+
+or
+
+Docker run (add `--rm` option to run temporary)
+```
+docker run -it -p 11434:11434 --name ollama ollama/ollama
+```
+
 ## Quickstart
 
 To run and chat with Llama via spring boot app:
@@ -61,7 +73,7 @@ To build the final jar and optimize the example application for production, run:
 To ensure everything worked, run:
 
 ```
-java -jar build/libs/*.jar
+java -jar -Dspring.profiles.active=prod build/libs/*.jar
 ```
 
 ### Packaging as docker
@@ -88,8 +100,6 @@ docker compose up
 
 
 ## Educational Resources
-- 
-
 ### Spring AI blogs:
 - [Leverage the Power of 45k, free, Hugging Face Models with Spring AI and Ollama](https://spring.io/blog/2024/10/22/leverage-the-power-of-45k-free-hugging-face-models-with-spring-ai-and-ollama)
 - [Supercharging Your AI Applications with Spring AI Advisors](https://spring.io/blog/2024/10/02/supercharging-your-ai-applications-with-spring-ai-advisors)
