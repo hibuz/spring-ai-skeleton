@@ -54,12 +54,12 @@ public class ChatClientService {
         return client.prompt(prompt).call().content();
     }
 
-    public void changeChatModel(String modelTypeName, String modelName) {
+    public void rebuildClient(String modelTypeName, String modelName, double temperature) {
         ModelType oldType = this.modelType;
         ModelType newType = ModelType.of(modelTypeName);
 
         this.modelType = newType;
-        this.chatOptions = ChatOptions.builder().model(modelName).temperature(chatOptions.getTemperature()).build();
+        this.chatOptions = ChatOptions.builder().model(modelName).temperature(temperature).build();
         this.client = builder().build();
 
         log.info("ChatClient changed! {} -> {}({})", oldType, newType, chatOptions.getModel());

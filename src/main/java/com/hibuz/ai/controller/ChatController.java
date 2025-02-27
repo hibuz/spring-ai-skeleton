@@ -41,11 +41,12 @@ public class ChatController implements InfoContributor {
          return service.getModelInfo();
     }
 
-    @PostMapping("/model/{modelTypeName}/{modelName}")
-    public Map<String, Object> changeModel(@Schema(example = "ollama") @PathVariable String modelTypeName,
+    @PostMapping("/model/{modelTypeName}/{modelName}/{temperature}")
+    public Map<String, Object> rebuildClient(@Schema(example = "ollama") @PathVariable String modelTypeName,
                                            @Schema(example = "ollama(llama3.2:1b,3b, qwen2.5:0.5b,1.5b,3b,7b, deepseek-r1:1.5b,7b,8b,14b, phi4:7b, mistral14b, llama3.2-vision:11b, llava:7b,13b, llava-llama3:8b)")
-                                           @PathVariable String modelName) {
-        service.changeChatModel(StringUtils.trim(modelTypeName), StringUtils.trim(modelName));
+                                           @PathVariable String modelName,
+                                           @Schema(example = "0.7") @PathVariable double temperature) {
+        service.rebuildClient(StringUtils.trim(modelTypeName), StringUtils.trim(modelName), temperature);
         return info();
     }
 
