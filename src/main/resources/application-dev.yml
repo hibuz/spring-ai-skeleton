@@ -1,7 +1,7 @@
 spring:
   ai:
     ollama:
-      base-url: http://localhost:11434/
+      #base-url: http://localhost:11434/
       init:
         pull-model-strategy: when-missing
 
