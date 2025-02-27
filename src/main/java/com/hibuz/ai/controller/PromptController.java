@@ -50,8 +50,8 @@ public class PromptController {
         this.service = service;
     }
 
-    @GetMapping("/template")
-	@Operation(summary = "1", description = "system prompt template : Tell me a {adjective} joke about {topic}",
+    @GetMapping("/2-1/template")
+	@Operation(description = "system prompt template : Tell me a {adjective} joke about {topic}",
        externalDocs = @ExternalDocumentation(description = "ChatGPT의 '시스템 프롬프트'", url = "https://news.hada.io/topic?id=13379"))
     public String template(@RequestParam(defaultValue = "funny") String adjective, @RequestParam(defaultValue = "cows") String topic) {
 
@@ -62,8 +62,7 @@ public class PromptController {
         return service.chat(prompt);
     }
 
-    @GetMapping("/roles")
-    @Operation(summary = "2")
+    @GetMapping("/2-2/roles")
 	public String roles(@Schema(description = "해적의 황금시대의 유명한 해적 3명과 그들이 왜 그랬는지 말해주세요. 각 해적에 대해 최소한 한 문장을 쓰세요.",
                                 defaultValue = "Tell me about three famous pirates from the Golden Age of Piracy and why they did." +
                                     "Write at least a sentence for each pirate.")
@@ -79,8 +78,18 @@ public class PromptController {
         return service.chat(prompt);
 	}
 
-    @GetMapping("/korean")
-    @Operation(summary = "3")
+    @GetMapping("/2-3/stuff")
+	public String stuff(@RequestParam(defaultValue = "Which athletes won the mixed doubles gold medal in curling at the 2022 Winter Olympics?'") String message,
+			@RequestParam(defaultValue = "false") boolean stuffit) {
+
+        log.info("chat stuffit={}> {}", stuffit, message);
+        PromptTemplate template = new PromptTemplate(qnaPrompt);
+		Prompt prompt = template.create(Map.of("question", message, "context", stuffit ? docsToStuffResource : ""));
+
+		return service.chat(prompt);
+	}
+
+    @GetMapping("/2-4/korean")
     public Map<String, String> korean(@RequestParam(defaultValue = "What is the most important reason to learn AI in one sentence?") String message,
                                       @RequestParam(required = false, defaultValue = "If the following sentence contains a lot of English words," +
                                         "translate it into very natural Korean.") String translateTemplate,
@@ -109,16 +118,4 @@ public class PromptController {
 
         return result;
     }
-
-    @GetMapping("/stuff")
-    @Operation(summary = "4")
-	public String stuff(@RequestParam(defaultValue = "Which athletes won the mixed doubles gold medal in curling at the 2022 Winter Olympics?'") String message,
-			@RequestParam(defaultValue = "false") boolean stuffit) {
-
-        log.info("chat stuffit={}> {}", stuffit, message);
-        PromptTemplate template = new PromptTemplate(qnaPrompt);
-		Prompt prompt = template.create(Map.of("question", message, "context", stuffit ? docsToStuffResource : ""));
-
-		return service.chat(prompt);
-	}
 }

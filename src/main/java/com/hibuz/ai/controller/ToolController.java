@@ -40,13 +40,10 @@ public class ToolController {
         this.service = service;
     }
 
-    @GetMapping("object")
-    @Operation(summary = "Information Retrieval & Taking Actions(Can you set an alarm 10 minutes from now?)")
-    public ChatResponse object(
-    @Schema(description = "해적의 황금시대의 유명한 해적 3명과 그들이 왜 그랬는지 말해주세요. 각 해적에 대해 최소한 한 문장을 쓰세요.",
-                                defaultValue = "Tell me about three famous pirates from the Golden Age of Piracy and why they did." +
-                                    "Write at least a sentence for each pirate.")
-    @RequestParam(defaultValue = "What day is today?") String message) {
+    @GetMapping("4-1/object")
+    @Operation(summary = "")
+    public ChatResponse object(@Schema(description = "Information Retrieval & Taking Actions(Can you set an alarm 10 minutes from now?)",
+                                defaultValue = "What day is today?") @RequestParam String message) {
         log.info("chat> {}", message);
         /**
          * ToolCallback[] dateTimeTools = ToolCallbacks.from(new DateTimeTools());
@@ -58,7 +55,7 @@ public class ToolController {
             .call().chatResponse();
     }
 
-    @GetMapping("bean")
+    @GetMapping("4-2/bean")
     public ChatResponse bean(@RequestParam(defaultValue = "What's the weather like in Seoul?") String message) {
         log.info("chat> {}", message);
         
@@ -66,7 +63,7 @@ public class ToolController {
         .call().chatResponse();
     }
 
-    @GetMapping("function")
+    @GetMapping("4-3/function")
     public ChatResponse function(@RequestParam(defaultValue = "What's the weather like in Seoul?") String message) {
         log.info("chat> {}", message);
 
@@ -79,7 +76,7 @@ public class ToolController {
         return service.getClient().prompt(message).tools(toolCallback).call().chatResponse();
     }
 
-    @GetMapping("method")
+    @GetMapping("4-4/method")
     public ChatResponse method(@RequestParam(defaultValue = "What's the weather like in Seoul, Paris and San Francisco? in Fahrenheit") String message) {
         log.info("chat> {}", message);
 

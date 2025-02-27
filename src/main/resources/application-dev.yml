@@ -7,8 +7,10 @@ spring:
 
 springdoc:
   swagger-ui:
-    doc-expansion: none
-    tags-sorter: alpha
+    docExpansion: none
+    operationsSorter: alpha
+    tagsSorter: alpha
+    use-root-path: true
 
 management:
   endpoints:
