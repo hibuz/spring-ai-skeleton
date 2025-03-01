@@ -24,7 +24,7 @@ public class WeatherTools implements Function<WeatherTools.Request, WeatherTools
 
     @Override
 	public Response apply(Request request) {
-		return new Response(22.0, Unit.F);
+		return new Response(22.0, Unit.C);
 	}
 
 	public static String getWeatherStatic(String city, Unit unit) {

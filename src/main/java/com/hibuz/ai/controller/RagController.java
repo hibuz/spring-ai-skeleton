@@ -25,7 +25,8 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("rag")
 @RestController
 @Slf4j
-@Tag(name = "step6. 검색 증강 생성 with 문서벡터 ETL", externalDocs = @ExternalDocumentation(description = "Retrieval Augmented Generation",
+@Tag(name = "step6. 검색 증강 생성(RAG)", description = "문서 수집(ingestion) ETL 프레임워크를 사용하여 다양한 형식(텍스트,이미지,오디오등)의 문서를 임베딩모델로 변환된 값을 벡터저장소로 저장하는 파이프라인 구성",
+    externalDocs = @ExternalDocumentation(description = "Retrieval Augmented Generation",
     url = "https://docs.spring.io/spring-ai/reference/concepts.html#concept-rag"))
 public class RagController {
 

@@ -38,7 +38,9 @@ public class MultiModalController {
     }
 
     @GetMapping("/embedding")
-    @Operation(externalDocs = @ExternalDocumentation(description = "Embeddings", url = "https://docs.spring.io/spring-ai/reference/concepts.html#_embeddings"))
+    @Operation(description = "벡터임베딩 : AI가 이 확장된 의미적 풍경에서 위치에 따라 관련 개념을 식별하고 그룹화할 수 있기 때문에 이 의미 공간을 벡터로 생각할 수 있음",
+            externalDocs = @ExternalDocumentation(description = "Embeddings",
+            url = "https://docs.spring.io/spring-ai/reference/concepts.html#_embeddings"))
     public Map<String, EmbeddingResponse> embed(@RequestParam(defaultValue = "Tell me a joke") String message) {
         EmbeddingResponse embeddingResponse = service.getEmbeddingModel().embedForResponse(List.of(message));
         return Map.of("embedding", embeddingResponse);

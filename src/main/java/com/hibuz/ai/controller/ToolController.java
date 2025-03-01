@@ -22,7 +22,6 @@ import com.hibuz.ai.service.ChatClientService;
 import com.hibuz.ai.util.WeatherTools;
 
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
-import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
@@ -41,7 +40,6 @@ public class ToolController {
     }
 
     @GetMapping("4-1/object")
-    @Operation(summary = "")
     public ChatResponse object(@Schema(description = "Information Retrieval & Taking Actions(Can you set an alarm 10 minutes from now?)",
                                 defaultValue = "What day is today?") @RequestParam String message) {
         log.info("chat> {}", message);
@@ -64,27 +62,26 @@ public class ToolController {
     }
 
     @GetMapping("4-3/function")
-    public ChatResponse function(@RequestParam(defaultValue = "What's the weather like in Seoul?") String message) {
+    public ChatResponse function(@RequestParam(defaultValue = "What's the weather like in Seoul in fahrenheit?") String message) {
         log.info("chat> {}", message);
 
         ToolCallback toolCallback = FunctionToolCallback
-            .builder("functionTool", new WeatherTools())
+            .builder("currentWeather", new WeatherTools())
             .inputType(WeatherTools.Request.class)
-            .description("Get the weather in location")
             .build();
 
         return service.getClient().prompt(message).tools(toolCallback).call().chatResponse();
     }
 
     @GetMapping("4-4/method")
-    public ChatResponse method(@RequestParam(defaultValue = "What's the weather like in Seoul, Paris and San Francisco? in Fahrenheit") String message) {
+    public ChatResponse method(@RequestParam(defaultValue = "What's the weather like in Seoul, Paris and San Francisco? in Celsius") String message) {
         log.info("chat> {}", message);
 
         Method method = Arrays.stream(WeatherTools.class.getMethods()).filter(m -> "getWeatherStatic".equals(m.getName())).findFirst().get();
 
         ToolCallback toolCallback = MethodToolCallback.builder()
             .toolDefinition(ToolDefinition.builder(method)
-                    .description("Get the current date and time in the user's timezone")
+                    .description("Get the weather in location")
                     .build())
             .toolMethod(method)
             .build();

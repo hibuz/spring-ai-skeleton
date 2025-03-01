@@ -27,8 +27,10 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("structured")
 @RestController
 @Slf4j
-@Tag(name = "step3. 구조화된 출력 구성", externalDocs = @ExternalDocumentation(description = "Structured Output API",
-	url = "https://docs.spring.io/spring-ai/reference/concepts.html#_structured_output"))
+@Tag(name = "step2. 구조화된 출력 구성(AI 모델 출력을 POJO에 매핑)",
+	description = "문자열을 애플리케이션 통합에 사용할 수 있는 데이터 구조로 변환하기 위해 꼼꼼하게 만들어진 프롬프트를 사용하며, 원하는 형식을 얻기 위해 모델과 여러 번 상호 작용해야 하는 경우가 많음",
+	externalDocs = @ExternalDocumentation(description = "Structured Output API",
+		url = "https://docs.spring.io/spring-ai/reference/concepts.html#_structured_output"))
 public class StructuredOutputController {
 
     private final ChatClientService service;
@@ -37,7 +39,7 @@ public class StructuredOutputController {
         this.service = service;
     }
 
-	@GetMapping("3-1/generic/map")
+	@GetMapping("2-1/generic/map")
 	public Map<String, Object> map(@RequestParam(defaultValue = "an array of numbers from 1 to 9 under they key name 'numbers'") String subject) {
 		String text = "Provide me a List of {subject}";
 		log.info("chat> {}", text.replace("{subject}", subject));
@@ -48,7 +50,7 @@ public class StructuredOutputController {
         		.entity(new ParameterizedTypeReference<Map<String, Object>>() {});
 	}
 
-	@GetMapping("3-2/generic/bean")
+	@GetMapping("2-2/generic/bean")
 	public List<ActorsFilms> generic(@RequestParam(defaultValue = "Tom Hanks and Bill Murray") String actor) {
 		String userMessage = "Generate the filmography of 5 movies for {actor}.";
 		log.info("chat> {}", userMessage.replace("{actor}", actor));
@@ -60,7 +62,7 @@ public class StructuredOutputController {
 				.entity(new ParameterizedTypeReference<List<ActorsFilms>>() {});
 	}
 
-	@GetMapping("3-3/converter/list")
+	@GetMapping("2-3/converter/list")
 	public List<String> list(@RequestParam(defaultValue = "ice cream flavors") String subject) {
 		String text = "List five {subject}";
 		log.info("chat> {}", text.replace("{subject}", subject));
@@ -71,7 +73,7 @@ public class StructuredOutputController {
                 .entity(new ListOutputConverter(new DefaultConversionService()));
 	}
 
-	@GetMapping("3-4/converter/bean")
+	@GetMapping("2-4/converter/bean")
 	public ActorsFilms convertor(@Schema(description = "template: Generate the filmography for the actor {actor}.\n<br/>{format}",
                                 defaultValue = "Jeff Bridges") @RequestParam String actor) {
 		var outputParser = new BeanOutputConverter<>(ActorsFilms.class);

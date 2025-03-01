@@ -28,7 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("prompt")
 @RestController
 @Slf4j
-@Tag(name = "step2. 시스템 프롬프트 템플릿", externalDocs = @ExternalDocumentation(description = "Prompts API",
+@Tag(name = "step3. 프롬프트 템플릿", externalDocs = @ExternalDocumentation(description = "Prompts API",
     url = "https://docs.spring.io/spring-ai/reference/api/prompt.html"))
 public class PromptController {
 
@@ -50,10 +50,10 @@ public class PromptController {
         this.service = service;
     }
 
-    @GetMapping("/2-1/template")
-	@Operation(description = "system prompt template : Tell me a {adjective} joke about {topic}",
-       externalDocs = @ExternalDocumentation(description = "ChatGPT의 '시스템 프롬프트'", url = "https://news.hada.io/topic?id=13379"))
-    public String template(@RequestParam(defaultValue = "funny") String adjective, @RequestParam(defaultValue = "cows") String topic) {
+    @GetMapping("/3-1/user")
+	@Operation(description = "user prompt template : Tell me a {adjective} joke about {topic}",
+       externalDocs = @ExternalDocumentation(description = "최근 연구 논문에서 사용할 수 있는 가장 효과적인 프롬프트 중 하나가 `깊은 숨을 들이마시고 단계별로 작업하세요(Take a deep breath and work on this step by step.)`라는 문구로 시작한다는 것을 발견"))
+    public String userPrompt(@RequestParam(defaultValue = "funny") String adjective, @RequestParam(defaultValue = "cows") String topic) {
 
         log.info("chat> Tell me a {} joke about {}", adjective, topic);
         PromptTemplate promptTemplate = new PromptTemplate("Tell me a {adjective} joke about {topic}");
@@ -62,8 +62,10 @@ public class PromptController {
         return service.chat(prompt);
     }
 
-    @GetMapping("/2-2/roles")
-	public String roles(@Schema(description = "해적의 황금시대의 유명한 해적 3명과 그들이 왜 그랬는지 말해주세요. 각 해적에 대해 최소한 한 문장을 쓰세요.",
+    @GetMapping("/3-2/system")
+	@Operation(description = "system prompt template : Your name is {name}. You should reply to the user's request with your name and also in the style of a {voice}.",
+       externalDocs = @ExternalDocumentation(description = "ChatGPT의 '시스템 프롬프트", url = "https://news.hada.io/topic?id=13379"))
+	public String systemPrompt(@Schema(description = "해적의 황금시대의 유명한 해적 3명과 그들이 왜 그랬는지 말해주세요. 각 해적에 대해 최소한 한 문장을 쓰세요.",
                                 defaultValue = "Tell me about three famous pirates from the Golden Age of Piracy and why they did." +
                                     "Write at least a sentence for each pirate.")
             @RequestParam String message,
@@ -78,8 +80,9 @@ public class PromptController {
         return service.chat(prompt);
 	}
 
-    @GetMapping("/2-3/stuff")
-	public String stuff(@RequestParam(defaultValue = "Which athletes won the mixed doubles gold medal in curling at the 2022 Winter Olympics?'") String message,
+    @GetMapping("/3-3/stuffing")
+    @Operation(description = "모델이 훈련되지 않은 정보를 사용하기 위해 미세조정(fine tuning)보다 실용적인 대안은 모델에 제공된 프롬프트에 질의와 컨텍스트 데이터를 함께 전달")
+	public String promptStuffing(@RequestParam(defaultValue = "Which athletes won the mixed doubles gold medal in curling at the 2022 Winter Olympics?'") String message,
 			@RequestParam(defaultValue = "false") boolean stuffit) {
 
         log.info("chat stuffit={}> {}", stuffit, message);
@@ -89,11 +92,12 @@ public class PromptController {
 		return service.chat(prompt);
 	}
 
-    @GetMapping("/2-4/korean")
+    @GetMapping("/3-4/korean")
     public Map<String, String> korean(@RequestParam(defaultValue = "What is the most important reason to learn AI in one sentence?") String message,
+                                      @RequestParam(defaultValue = "false") boolean useQnaPromptForKorean,
                                       @RequestParam(required = false, defaultValue = "If the following sentence contains a lot of English words," +
-                                        "translate it into very natural Korean.") String translateTemplate,
-                                      @RequestParam(defaultValue = "false") boolean useQnaPromptForKorean) {
+                                        "translate it into very natural Korean.") String translateTemplate
+                                      ) {
 
         log.info("chat> {}", message);
         Prompt prompt;
