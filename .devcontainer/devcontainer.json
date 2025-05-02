@@ -2,7 +2,7 @@
     "name": "Java",
     "dockerComposeFile": "docker-compose.yml",
     "service": "spring-ai-dev",
-    "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+    "workspaceFolder": "/workspaces/spring-ai",
     "features": {
       "ghcr.io/devcontainers/features/java:1": {
         "version": "17"

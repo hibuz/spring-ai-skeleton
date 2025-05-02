@@ -13,3 +13,8 @@ services:
     container_name: ollama
     ports:
       - "11435:11434"
+    volumes:
+      - ollama-vol:/root/.ollama:cached
+
+volumes:
+  ollama-vol: {}
