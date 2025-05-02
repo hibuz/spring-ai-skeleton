@@ -2,8 +2,6 @@ package com.hibuz.ai.controller;
 
 import java.util.List;
 
-import org.springframework.ai.chat.messages.AssistantMessage;
-import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.SystemPromptTemplate;
 import org.springframework.ai.document.Document;
@@ -14,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.hibuz.ai.service.ChatClientService;
 import com.hibuz.ai.service.RagService;
 import com.hibuz.ai.util.BikeJsonReader;
 import com.hibuz.ai.util.CodeMarkdownReader;
@@ -38,21 +37,21 @@ public class RagController {
 
     private final RagService ragService;
 
-    private final ChatModel chatModel;
+    private final ChatClientService clientService;
 
     private final BikeJsonReader bikeJsonReader;
 
     private final CodeMarkdownReader codeMarkdownReader;
 
-    public RagController(RagService ragService, ChatModel chatModel, BikeJsonReader bikeJsonReader, CodeMarkdownReader codeMarkdownReader) {
+    public RagController(RagService ragService, ChatClientService clientService, BikeJsonReader bikeJsonReader, CodeMarkdownReader codeMarkdownReader) {
         this.ragService = ragService;
-        this.chatModel = chatModel;
+        this.clientService = clientService;
         this.bikeJsonReader = bikeJsonReader;
         this.codeMarkdownReader = codeMarkdownReader;
     }
 
     @GetMapping("/bike")
-	public AssistantMessage queryBike(@RequestParam(defaultValue = "What bike is good for city commuting?") String message) {
+	public String queryBike(@RequestParam(defaultValue = "What bike is good for city commuting?") String message) {
 
         log.info("chat> {}", message);
 
@@ -61,11 +60,11 @@ public class RagController {
 
         Prompt prompt = ragService.createSimilaritySearchPrompt(documentList, message, systemPromptTemplate);
 
-		return chatModel.call(prompt).getResult().getOutput();
+		return clientService.chat(prompt);
     }
 
     @GetMapping("/code")
-	public AssistantMessage queryCode(@RequestParam(defaultValue = "Show me the spring ai example") String message) {
+	public String queryCode(@RequestParam(defaultValue = "Show me the spring ai example") String message) {
 
         log.info("chat> {}", message);
 
@@ -74,6 +73,6 @@ public class RagController {
 
         Prompt prompt = ragService.createSimilaritySearchPrompt(documentList, message, systemPromptTemplate);
 
-		return chatModel.call(prompt).getResult().getOutput();
+		return clientService.chat(prompt);
     }
 }

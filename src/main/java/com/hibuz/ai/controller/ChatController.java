@@ -43,7 +43,7 @@ public class ChatController implements InfoContributor {
 
     @PostMapping("/model/{modelTypeName}/{modelName}/{temperature}")
     public Map<String, Object> rebuildClient(@Schema(example = "ollama") @PathVariable String modelTypeName,
-                                           @Schema(example = "ollama(llama3.2:1b,3b, qwen2.5:0.5b,1.5b,3b,7b, deepseek-r1:1.5b,7b,8b,14b, phi4:7b, mistral14b, llama3.2-vision:11b, llava:7b,13b, llava-llama3:8b)")
+                                           @Schema(example = "ollama(qwen2.5:0.5b,1.5b,3b,7b, qwen3:0.6b,1.7b, gemma3:1b, llama3.2:1b,3b, deepseek-r1:1.5b,7b,8b,14b, phi4:7b, mistral14b, llama3.2-vision:11b, llava:7b,13b, llava-llama3:8b)")
                                            @PathVariable String modelName,
                                            @Schema(example = "0.7") @PathVariable double temperature) {
         service.rebuildClient(StringUtils.trim(modelTypeName), StringUtils.trim(modelName), temperature);

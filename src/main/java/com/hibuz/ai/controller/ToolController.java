@@ -57,7 +57,7 @@ public class ToolController {
     public ChatResponse bean(@RequestParam(defaultValue = "What's the weather like in Seoul?") String message) {
         log.info("chat> {}", message);
         
-        return service.getClient().prompt(message).tools("currentWeather")
+        return service.getClient().prompt(message).toolNames("currentWeather")
         .call().chatResponse();
     }
 
@@ -70,7 +70,7 @@ public class ToolController {
             .inputType(WeatherTools.Request.class)
             .build();
 
-        return service.getClient().prompt(message).tools(toolCallback).call().chatResponse();
+        return service.getClient().prompt(message).toolCallbacks(toolCallback).call().chatResponse();
     }
 
     @GetMapping("4-4/method")
@@ -86,7 +86,7 @@ public class ToolController {
             .toolMethod(method)
             .build();
 
-        return service.getClient().prompt(message).tools(toolCallback).call().chatResponse();
+        return service.getClient().prompt(message).toolCallbacks(toolCallback).call().chatResponse();
     }
 
     class DateTimeTools {
