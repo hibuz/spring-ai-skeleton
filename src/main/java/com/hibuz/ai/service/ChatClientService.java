@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.ai.chat.client.ChatClient.Builder;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.prompt.ChatOptions;
 import org.springframework.ai.chat.prompt.Prompt;
@@ -42,10 +41,6 @@ public class ChatClientService {
         this.embeddingModel = embeddingModel;
     }
 
-    public Builder builder() {
-        return ChatClient.builder(modelMap.get(modelType)).defaultOptions(chatOptions);
-    }
-
     public String chat(String userMessage) {
         return chat(new Prompt(userMessage));
     }
@@ -60,7 +55,7 @@ public class ChatClientService {
 
         this.modelType = newType;
         this.chatOptions = ChatOptions.builder().model(modelName).temperature(temperature).build();
-        this.client = builder().build();
+        this.client = ChatClient.builder(modelMap.get(modelType)).defaultOptions(chatOptions).build();
 
         log.info("ChatClient changed! {} -> {}({})", oldType, newType, chatOptions.getModel());
     }

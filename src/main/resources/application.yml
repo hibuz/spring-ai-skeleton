@@ -1,3 +1,7 @@
+server:
+  servlet:
+    context-path: /ai
+
 spring:
   profiles:
     active:
@@ -14,6 +18,12 @@ spring:
       embedding:
         options:
           model: bge-m3
-server:
-  servlet:
-    context-path: /ai
+    mcp:
+      client:
+        type: ASYNC
+        toolcallback:
+          enabled: true
+        sse:
+          connections:
+            server1:
+              url: https://gitmcp.io/spring-projects/spring-ai

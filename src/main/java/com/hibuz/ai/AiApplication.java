@@ -17,6 +17,6 @@ public class AiApplication {
 	}
 	@Bean
     public ApplicationRunner run(ChatModel model) {
-        return args -> log.info("ChatModel: {}", model.getDefaultOptions().getModel());
+        return args -> log.info("Default chatModel: {}", model.getDefaultOptions().getModel());
 	}
 }
