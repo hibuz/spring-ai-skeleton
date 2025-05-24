@@ -114,9 +114,13 @@ public class PromptController {
         Map<String, String> result = new HashMap<>();
         result.put("generation", response);
         if (StringUtils.hasText(translateTemplate)) {
-            PromptTemplate promptTemplate =
-                    new PromptTemplate(translateTemplate + "\n\n{sentence}", Map.of("sentence", response));
-            String translated = service.chat(promptTemplate.create());
+           
+            PromptTemplate promptTemplate =  PromptTemplate.builder()
+                .template(translateTemplate + "\n\n{sentence}")
+                .variables(Map.of("sentence", response))
+                .build();
+
+                String translated = service.chat(promptTemplate.create());
             result.put("translated", translated);
         }
 
