@@ -18,6 +18,9 @@ spring:
       embedding:
         options:
           model: bge-m3
+      init:
+        pull-model-strategy: when_missing
+
     mcp:
       client:
         type: ASYNC
