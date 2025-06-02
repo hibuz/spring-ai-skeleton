@@ -54,8 +54,7 @@ public class StructuredOutputController {
 	public List<ActorsFilms> generic(@RequestParam(defaultValue = "Tom Hanks and Bill Murray") String actor) {
 		String userMessage = "Generate the filmography of 5 movies for {actor}.";
 		log.info("chat> {}", userMessage.replace("{actor}", actor));
-		PromptTemplate promptTemplate = new PromptTemplate(userMessage, Map.of("actor", actor));
-		Prompt prompt = promptTemplate.create();
+		Prompt prompt = PromptTemplate.builder().template(userMessage).variables(Map.of("actor", actor)).build().create();
 
 		return service.getClient().prompt(prompt)
 				.call()
@@ -84,8 +83,9 @@ public class StructuredOutputController {
 				Generate the filmography for the actor {actor}.
 				{format}
 				""";
-		PromptTemplate promptTemplate = new PromptTemplate(userMessage, Map.of("actor", actor, "format", format));
-		Prompt prompt = promptTemplate.create();
+		Prompt prompt = PromptTemplate.builder().template(userMessage)
+			.variables(Map.of("actor", actor, "format", format))
+			.build().create();
 
 		return outputParser.convert(service.chat(prompt));
 	}

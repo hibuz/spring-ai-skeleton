@@ -51,8 +51,8 @@ public class MultiModalController {
 
         log.info("chat> {}", message);
 
-        var userMessage = new UserMessage(message, new Media(MimeTypeUtils.IMAGE_PNG, this.imageResource));
-
-        return service.getClient().prompt(new Prompt(userMessage)).call().chatResponse();
+        return service.getClient().prompt()
+            .user(u -> u.text(message).media(new Media(MimeTypeUtils.IMAGE_PNG, this.imageResource)))
+            .call().chatResponse();
     }
 }

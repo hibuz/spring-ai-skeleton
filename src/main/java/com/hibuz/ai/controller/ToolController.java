@@ -15,6 +15,7 @@ import org.springframework.ai.tool.annotation.ToolParam;
 import org.springframework.ai.tool.definition.ToolDefinition;
 import org.springframework.ai.tool.function.FunctionToolCallback;
 import org.springframework.ai.tool.method.MethodToolCallback;
+import org.springframework.ai.util.json.schema.JsonSchemaGenerator;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -88,7 +89,8 @@ public class ToolController {
         Method method = Arrays.stream(WeatherTools.class.getMethods()).filter(m -> "getWeatherStatic".equals(m.getName())).findFirst().get();
 
         ToolCallback toolCallback = MethodToolCallback.builder()
-            .toolDefinition(ToolDefinition.builder(method)
+            .toolDefinition(ToolDefinition.builder()
+                    .inputSchema(JsonSchemaGenerator.generateForMethodInput(method))
                     .description("Get the weather in location")
                     .build())
             .toolMethod(method)
