@@ -17,7 +17,7 @@ spring:
           temperature: 0.7
       embedding:
         options:
-          model: bge-m3
+          model: embeddinggemma
       init:
         pull-model-strategy: when_missing
 
