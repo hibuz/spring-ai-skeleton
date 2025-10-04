@@ -26,7 +26,8 @@ repositories {
 }
 
 ext {
-	set('springAiVersion', '1.0.2')
+	set('springAiVersion', '1.0.3')
+	set('springDocVersion', '2.8.13')
 	set('dockerImage', 'ghcr.io/hibuz/spring-ai')
 }
 
@@ -38,7 +39,7 @@ dependencies {
 	implementation 'org.springframework.ai:spring-ai-starter-mcp-client-webflux'
 	implementation 'org.springframework.ai:spring-ai-vector-store'
 	implementation 'org.springframework.ai:spring-ai-markdown-document-reader'
-	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.8'
+	implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:${springDocVersion}"
 
 	compileOnly 'org.projectlombok:lombok'
   	annotationProcessor 'org.projectlombok:lombok'
