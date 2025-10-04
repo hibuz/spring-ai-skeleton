@@ -11,16 +11,6 @@ services:
     # Overrides default command so things don't shut down after the process ends.
     command: sleep infinity
 
-  open-webui:
-    image: ghcr.io/open-webui/open-webui:${WEBUI_DOCKER_TAG-main}
-    container_name: open-webui
-    depends_on:
-      - ollama-dev
-    environment:
-      - 'OLLAMA_BASE_URL=http://ollama:11434'
-    ports:
-      - "3000:8080"
-
   ollama-dev:
     hostname: ollama
     container_name: ollama-dev
@@ -29,6 +19,17 @@ services:
       - "11434:11434"
     volumes:
       - ollama-vol:/root/.ollama:cached
+
+#  open-webui:
+#    image: ghcr.io/open-webui/open-webui:${WEBUI_DOCKER_TAG-main}
+#    container_name: open-webui
+#    depends_on:
+#      - ollama-dev
+#    environment:
+#      - 'OLLAMA_BASE_URL=http://ollama:11434'
+#    ports:
+#      - "3000:8080"
+
 
 volumes:
   ollama-vol: {}
