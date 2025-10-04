@@ -25,8 +25,8 @@ public class ApiLoggingAop {
         Object result = joinPoint.proceed();
         watch.stop();
         try {
-            if (result instanceof Map) {
-                ((Map) result).put("stopWatch", (watch.getTotalTimeSeconds() + " seconds"));
+            if (result instanceof Map originMap) {
+                originMap.put("stopWatch", (watch.getTotalTimeSeconds() + " seconds"));
             } else {
                 log.info("stopWatch : {} seconds", watch.getTotalTimeSeconds());
             }
