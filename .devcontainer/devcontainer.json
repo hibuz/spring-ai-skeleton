@@ -9,23 +9,17 @@
       },
       "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {}
     },
-    "postCreateCommand": "java -version",
     "customizations": {
       "vscode": {
         "extensions": [
-          "mhutchie.git-graph",
-          "seatonjiang.gitmoji-vscode",
+          "vmware.vscode-boot-dev-pack",
+          "eamodio.gitlens",
+          "k--kato.intellij-idea-keybindings",
           "SonarSource.sonarlint-vscode"
         ]
       }
     },
     "hostRequirements": {
       "cpus": 4
-    },
-    "remoteUser": "vscode",
-    "forwardPorts": [
-        3000,
-        8080,
-        11434
-    ]
+    }
 }
