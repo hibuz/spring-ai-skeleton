@@ -20,6 +20,19 @@ services:
     volumes:
       - ollama-vol:/root/.ollama:cached
 
+  postgres:
+    image: pgvector/pgvector:pg18
+    hostname: postgres
+    container_name: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: pgdb
+      POSTGRES_USER: pguser
+      POSTGRES_PASSWORD: pguser_pw123!
+
 #  open-webui:
 #    image: ghcr.io/open-webui/open-webui:${WEBUI_DOCKER_TAG-main}
 #    container_name: open-webui
@@ -33,3 +46,4 @@ services:
 
 volumes:
   ollama-vol: {}
+  pg-data: {}

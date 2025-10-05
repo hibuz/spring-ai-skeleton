@@ -30,3 +30,17 @@ spring:
           connections:
             server1:
               url: https://gitmcp.io/spring-projects/spring-ai
+
+    vectorstore:
+      pgvector:
+        index-type: HNSW
+        distance-type: COSINE_DISTANCE
+        dimensions: 768 # embeddinggemma model dimension is 768
+        max-document-batch-size: 10000 # Optional: Maximum number of documents per batch
+        initialize-schema: true
+        remove-existing-vector-store-table: true
+
+  datasource:
+    url: jdbc:postgresql://postgres:5432/pgdb
+    username: pguser
+    password: pguser_pw123!

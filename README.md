@@ -92,6 +92,41 @@ To ensure everything worked, run:
 docker compose up
 ```
 
+### PGvector
+
+```
+docker exec -it postgres psql -d pgdb -U pguser
+
+pgdb=# SELECT * FROM pg_extension;
+  oid  | extname | extowner | extnamespace | extrelocatable | extversion | extconfig | extcondition 
+-------+---------+----------+--------------+----------------+------------+-----------+--------------
+ 13579 | plpgsql |       10 |           11 | f              | 1.0        |           | 
+ 16385 | vector  |       10 |         2200 | t              | 0.8.1      |           | 
+(2 rows)
+
+pgdb=# \d vector_store
+                     Table "public.vector_store"
+  Column   |    Type     | Collation | Nullable |      Default       
+-----------+-------------+-----------+----------+--------------------
+ id        | uuid        |           | not null | uuid_generate_v4()
+ content   | text        |           |          | 
+ metadata  | json        |           |          | 
+ embedding | vector(768) |           |          | 
+Indexes:
+    "vector_store_pkey" PRIMARY KEY, btree (id)
+    "spring_ai_vector_index" hnsw (embedding vector_cosine_ops)
+
+pgdb=# select id, metadata from vector_store;
+                  id                  |      metadata      
+--------------------------------------+--------------------
+ 4bc11242-8281-4319-a8e1-1b9dea84306b | {"meta1": "meta1"}
+ dfe4063b-c2d6-41dd-a293-901d5b29c24e | {"meta": "meta2"}
+ 8f1fb602-38cd-4b6b-a71c-d9d004badf91 | {"meta": "meta3"}
+(3 rows)
+
+pgdb=# exit;
+```
+
 ## Project Links
 
 * [Swagger](http://localhost:8080/ai/swagger-ui/index.html)

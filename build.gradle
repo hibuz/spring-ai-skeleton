@@ -37,7 +37,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-aop'
 	implementation 'org.springframework.ai:spring-ai-starter-model-ollama'
 	implementation 'org.springframework.ai:spring-ai-starter-mcp-client-webflux'
-	implementation 'org.springframework.ai:spring-ai-vector-store'
+	implementation 'org.springframework.ai:spring-ai-starter-vector-store-pgvector'
 	implementation 'org.springframework.ai:spring-ai-markdown-document-reader'
 	implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:${springDocVersion}"
 
