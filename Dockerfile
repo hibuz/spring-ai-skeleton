@@ -1,4 +1,4 @@
-FROM amazoncorretto:17-alpine
+FROM amazoncorretto:21-alpine
 LABEL org.opencontainers.image.authors="hibuz@hibuz.com"
 LABEL org.opencontainers.image.source="https://github.com/hibuz/spring-ai-skeleton"
 
