@@ -6,6 +6,8 @@ services:
       - ollama-dev
     ports:
       - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
     volumes:
       - ..:/workspaces/spring-ai:cached
     # Overrides default command so things don't shut down after the process ends.
@@ -27,11 +29,9 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - pg-data:/var/lib/postgresql/data
+      - pg-vol:/var/lib/postgresql/data
     environment:
-      POSTGRES_DB: pgdb
-      POSTGRES_USER: pguser
-      POSTGRES_PASSWORD: pguser_pw123!
+      POSTGRES_PASSWORD: pass
 
 #  open-webui:
 #    image: ghcr.io/open-webui/open-webui:${WEBUI_DOCKER_TAG-main}
@@ -46,4 +46,4 @@ services:
 
 volumes:
   ollama-vol: {}
-  pg-data: {}
+  pg-vol: {}

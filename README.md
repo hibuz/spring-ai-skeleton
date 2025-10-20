@@ -50,6 +50,8 @@ or
 Docker run (add `--rm` option to run temporary)
 ```
 docker run -it -p 11434:11434 --name ollama ollama/ollama
+
+docker run -it -p 5432:5432 -e POSTGRES_PASSWORD=pass --name postgres pgvector/pgvector:pg18
 ```
 
 ## Quickstart
@@ -57,7 +59,11 @@ docker run -it -p 11434:11434 --name ollama ollama/ollama
 To run and chat with Llama via spring boot app:
 
 ```
+// simple run on port 8080
 ./gradlew bootRun
+
+// run with dev profile and local ollama server
+./gradlew bootRun --args='--spring.profiles.active=dev --spring.ai.ollama.base-url=http://localhost:11434/ --spring.datasource.url=jdbc:postgresql://localhost:5432/postgres'
 ```
 
 ## Building for production
@@ -73,6 +79,7 @@ To build the final jar and optimize the example application for production, run:
 To ensure everything worked, run:
 
 ```
+// run in devcontainer
 java -jar -Dspring.profiles.active=prod build/libs/*.jar
 ```
 
@@ -95,16 +102,18 @@ docker compose up
 ### PGvector
 
 ```
-docker exec -it postgres psql -d pgdb -U pguser
+docker exec -it postgres psql -U postgres
 
-pgdb=# SELECT * FROM pg_extension;
-  oid  | extname | extowner | extnamespace | extrelocatable | extversion | extconfig | extcondition 
--------+---------+----------+--------------+----------------+------------+-----------+--------------
- 13579 | plpgsql |       10 |           11 | f              | 1.0        |           | 
- 16385 | vector  |       10 |         2200 | t              | 0.8.1      |           | 
-(2 rows)
+postgres=# SELECT * FROM pg_extension;
+  oid  |  extname  | extowner | extnamespace | extrelocatable | extversion | extconfig | extcondition 
+-------+-----------+----------+--------------+----------------+------------+-----------+--------------
+ 13579 | plpgsql   |       10 |           11 | f              | 1.0        |           | 
+ 16388 | vector    |       10 |         2200 | t              | 0.8.1      |           | 
+ 16716 | hstore    |       10 |         2200 | t              | 1.8        |           | 
+ 16844 | uuid-ossp |       10 |         2200 | t              | 1.1        |           | 
+(4 rows)
 
-pgdb=# \d vector_store
+postgres=# \d vector_store
                      Table "public.vector_store"
   Column   |    Type     | Collation | Nullable |      Default       
 -----------+-------------+-----------+----------+--------------------
@@ -116,7 +125,7 @@ Indexes:
     "vector_store_pkey" PRIMARY KEY, btree (id)
     "spring_ai_vector_index" hnsw (embedding vector_cosine_ops)
 
-pgdb=# select id, metadata from vector_store;
+postgres=# select id, metadata from vector_store;
                   id                  |      metadata      
 --------------------------------------+--------------------
  4bc11242-8281-4319-a8e1-1b9dea84306b | {"meta1": "meta1"}
@@ -124,7 +133,7 @@ pgdb=# select id, metadata from vector_store;
  8f1fb602-38cd-4b6b-a71c-d9d004badf91 | {"meta": "meta3"}
 (3 rows)
 
-pgdb=# exit;
+postgres=# exit;
 ```
 
 ## Project Links

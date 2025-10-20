@@ -3,6 +3,7 @@ package com.hibuz.ai.controller;
 import java.util.List;
 
 import org.springframework.ai.document.Document;
+import org.springframework.context.annotation.Profile;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -13,6 +14,7 @@ import com.hibuz.ai.service.VectorStoreService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 
+@Profile({ "dev", "prod" })
 @RequestMapping("rag")
 @RestController
 @Slf4j

@@ -1,9 +1,22 @@
 spring:
   ai:
     ollama:
-      #base-url: http://localhost:11434/
       init:
         pull-model-strategy: when-missing
+
+    vectorstore:
+      pgvector:
+        index-type: HNSW
+        distance-type: COSINE_DISTANCE
+        dimensions: 768 # embeddinggemma model dimension is 768
+        max-document-batch-size: 10000 # Optional: Maximum number of documents per batch
+        initialize-schema: true
+        remove-existing-vector-store-table: true
+
+  datasource:
+    url: jdbc:postgresql://postgres:5432/postgres
+    username: postgres
+    password: pass
 
 springdoc:
   swagger-ui:
