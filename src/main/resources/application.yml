@@ -28,5 +28,13 @@ spring:
             server1:
               url: https://gitmcp.io/spring-projects/spring-ai
 
+    vectorstore:
+      pgvector:
+        index-type: HNSW
+        distance-type: COSINE_DISTANCE
+        dimensions: 768 # embeddinggemma model dimension is 768
+        max-document-batch-size: 10000 # Optional: Maximum number of documents per batch
+        remove-existing-vector-store-table: true
+
   datasource:
     url: jdbc:h2:mem:testdb

@@ -90,7 +90,7 @@ To build the final jar and optimize the example application for production, run:
 ```
 ./gradlew docker
 
-docker run --rm -it -p 8080:8080 --name spring-tmp ghcr.io/hibuz/spring-ai
+docker run --rm -it -p 8888:8080 --name spring-tmp ghcr.io/hibuz/spring-ai
 ```
 
 To ensure everything worked, run:

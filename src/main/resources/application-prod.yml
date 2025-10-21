@@ -3,3 +3,12 @@ spring:
     ollama:
       init:
         pull-model-strategy: when-missing
+
+    vectorstore:
+      pgvector:
+        initialize-schema: true
+
+  datasource:
+    url: jdbc:postgresql://postgres:5432/postgres
+    username: postgres
+    password: pass

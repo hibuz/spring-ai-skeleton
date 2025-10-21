@@ -22,7 +22,7 @@ services:
     volumes:
       - ollama-vol:/root/.ollama:cached
 
-  postgres:
+  postgres-dev:
     image: pgvector/pgvector:pg18
     hostname: postgres
     container_name: postgres
@@ -42,7 +42,6 @@ services:
 #      - 'OLLAMA_BASE_URL=http://ollama:11434'
 #    ports:
 #      - "3000:8080"
-
 
 volumes:
   ollama-vol: {}
