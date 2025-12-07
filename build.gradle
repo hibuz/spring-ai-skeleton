@@ -25,8 +25,8 @@ repositories {
 }
 
 ext {
-	set('springAiVersion', '1.1.0')
-	set('springDocVersion', '2.8.13')
+	set('springAiVersion', '1.1.1')
+	set('springDocVersion', '3.0.0')
 	set('dockerImage', 'ghcr.io/hibuz/spring-ai')
 }
 
