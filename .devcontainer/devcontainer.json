@@ -19,6 +19,9 @@
         ]
       }
     },
+    "remoteEnv": {
+      "DOCKER_API_VERSION": "1.43"
+    },
     "hostRequirements": {
       "cpus": 4
     }
