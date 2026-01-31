@@ -1,70 +1,59 @@
 plugins {
-	id 'java'
-	id 'org.springframework.boot' version '3.5.8'
-	id 'io.spring.dependency-management' version '1.1.7'
-	id 'com.palantir.docker' version '0.36.0'
+  id 'java'
+  id 'org.springframework.boot' version '4.0.2'
+  id 'io.spring.dependency-management' version '1.1.7'
 }
 
 group = 'com.hibuz'
 version = '0.0.1-SNAPSHOT'
 
 java {
-	toolchain {
-		languageVersion = JavaLanguageVersion.of(21)
-	}
-}
-
-configurations {
-  compileOnly {
-    extendsFrom annotationProcessor
+  toolchain {
+    languageVersion = JavaLanguageVersion.of(21)
   }
 }
 
 repositories {
-	mavenCentral()
+  mavenCentral()
 }
 
 ext {
-	set('springAiVersion', '1.1.2')
-	set('springDocVersion', '2.8.14')
-	set('dockerImage', 'ghcr.io/hibuz/spring-ai')
+  set('springAiVersion', "2.0.0-M2")
+  set('springDocVersion', '3.0.1')
+  set('dockerImage', 'ghcr.io/hibuz/spring-ai')
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-actuator'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.springframework.boot:spring-boot-starter-aop'
-	implementation 'org.springframework.ai:spring-ai-starter-model-ollama'
-	implementation 'org.springframework.ai:spring-ai-starter-mcp-client-webflux'
-	implementation 'org.springframework.ai:spring-ai-starter-vector-store-pgvector'
-	implementation 'org.springframework.ai:spring-ai-markdown-document-reader'
-	implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:${springDocVersion}"
+  implementation 'org.springframework.ai:spring-ai-advisors-vector-store'
+  implementation 'org.springframework.ai:spring-ai-starter-model-ollama'
+  implementation 'org.springframework.ai:spring-ai-starter-vector-store-pgvector'
+  implementation 'org.springframework.boot:spring-boot-starter-actuator'
+  implementation 'org.springframework.boot:spring-boot-starter-web'
+  implementation 'org.springframework.ai:spring-ai-starter-mcp-client-webflux'
+  implementation 'org.springframework.ai:spring-ai-markdown-document-reader'
+  implementation 'org.springframework.boot:spring-boot-starter-aspectj'
+  implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:${springDocVersion}"
 
-	compileOnly 'org.projectlombok:lombok'
-	runtimeOnly 'com.h2database:h2'
-	//runtimeOnly 'org.postgresql:postgresql'
-  	annotationProcessor 'org.projectlombok:lombok'
-	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+  compileOnly 'org.projectlombok:lombok'
+  runtimeOnly 'com.h2database:h2'
+  //runtimeOnly 'org.postgresql:postgresql'
+  annotationProcessor 'org.projectlombok:lombok'
+  developmentOnly 'org.springframework.boot:spring-boot-devtools'
+  testImplementation 'org.springframework.boot:spring-boot-starter-test'
+  testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 dependencyManagement {
-	imports {
-		mavenBom "org.springframework.ai:spring-ai-bom:${springAiVersion}"
-	}
+  imports {
+    mavenBom "org.springframework.ai:spring-ai-bom:${springAiVersion}"
+  }
 }
 
-docker {
-	name "${dockerImage}"
-	tag('ghcr', "${dockerImage}")
-	dockerfile file('Dockerfile')
-	files tasks.bootJar.outputs.files
-	buildArgs(['JAR_FILE': tasks.bootJar.outputs.files.singleFile.name])
-	pull true
-	noCache true
+tasks.named('bootBuildImage') {
+  imageName = "${dockerImage}"
+  builder = 'paketobuildpacks/builder-jammy-java-tiny'
 }
 
 tasks.named('test') {
-	useJUnitPlatform()
+  useJUnitPlatform()
 }
