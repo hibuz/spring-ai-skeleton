@@ -1,7 +1,3 @@
-server:
-  servlet:
-    context-path: /ai
-
 spring:
   application:
     name: ai
@@ -23,7 +19,7 @@ spring:
         type: ASYNC
         toolcallback:
           enabled: true
-        sse:
+        streamable-http:
           connections:
             server1:
               url: https://gitmcp.io/spring-projects/spring-ai

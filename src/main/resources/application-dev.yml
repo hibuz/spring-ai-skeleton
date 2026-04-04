@@ -18,7 +18,6 @@ springdoc:
     docExpansion: none
     operationsSorter: alpha
     tagsSorter: alpha
-    use-root-path: true
 
 management:
   endpoints:
