@@ -107,8 +107,8 @@ public class ToolController {
         log.info("chat> {}", message);
 
         if (useMcpClient) {
-            ChatOptions chatOptions = ChatOptions.builder().model(modelName).temperature(0.7).build();
-            return service.getClient().prompt(message).options(chatOptions).toolCallbacks(toolCallbacks).call().chatResponse().getResult();
+            ChatOptions.Builder builder = ChatOptions.builder().model(modelName).temperature(0.7);
+            return service.getClient().prompt(message).options(builder).toolCallbacks(toolCallbacks).call().chatResponse().getResult();
         } else {
             return service.getClient().prompt(message).call().chatResponse().getResult();
         }

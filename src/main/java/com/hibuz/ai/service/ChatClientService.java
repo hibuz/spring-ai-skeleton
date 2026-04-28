@@ -54,8 +54,9 @@ public class ChatClientService {
         ModelType newType = ModelType.of(modelTypeName);
 
         this.modelType = newType;
-        this.chatOptions = ChatOptions.builder().model(modelName).temperature(temperature).build();
-        this.client = ChatClient.builder(modelMap.get(modelType)).defaultOptions(chatOptions).build();
+        ChatOptions.Builder builder = ChatOptions.builder().model(modelName).temperature(temperature);
+        this.chatOptions = builder.build();
+        this.client = ChatClient.builder(modelMap.get(modelType)).defaultOptions(builder).build();
 
         log.info("ChatClient changed! {} -> {}({})", oldType, newType, chatOptions.getModel());
     }
