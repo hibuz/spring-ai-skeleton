@@ -1,6 +1,6 @@
 services:
   spring-ai-dev:
-    image: mcr.microsoft.com/devcontainers/base:ubuntu
+    image: hibuz/zsh
     container_name: spring-ai-dev
     depends_on:
       - ollama-dev
