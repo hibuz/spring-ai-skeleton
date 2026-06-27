@@ -33,7 +33,7 @@ public class RagService {
         // Step 2 retrieve related documents to query
 		List<Document> similarDocuments = this.vectorStore.similaritySearch(message);
         log.info("found {} similar documents", similarDocuments.size());
-        String documents = similarDocuments.stream().map(Document::getText).collect(Collectors.joining("\n"));
+        String documents = similarDocuments.stream().map(document -> document.getText()).collect(Collectors.joining("\n"));
 
 		// Step 3 Embed documents into SystemMessage with the system prompt template
 		Message systemMessage = template.createMessage(Map.of("documents", documents));

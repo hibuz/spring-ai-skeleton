@@ -34,7 +34,7 @@ public class ChatClientService {
     ChatClientService(List<ChatModel> modelList, EmbeddingModel embeddingModel) {
         ChatModel chatModel = modelList.get(0);
         this.modelType = ModelType.valueOf(chatModel);
-        this.chatOptions = chatModel.getDefaultOptions();
+        this.chatOptions = chatModel.getOptions();
         this.client = ChatClient.builder(chatModel).build();
 
         this.modelMap = modelList.stream().collect(Collectors.toMap(ModelType::valueOf, m2 -> m2));
@@ -54,7 +54,7 @@ public class ChatClientService {
         ModelType newType = ModelType.of(modelTypeName);
 
         this.modelType = newType;
-        ChatOptions.Builder builder = ChatOptions.builder().model(modelName).temperature(temperature);
+        ChatOptions.Builder<?> builder = ChatOptions.builder().model(modelName).temperature(temperature);
         this.chatOptions = builder.build();
         this.client = ChatClient.builder(modelMap.get(modelType)).defaultOptions(builder).build();
 

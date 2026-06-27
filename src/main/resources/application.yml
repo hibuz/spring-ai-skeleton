@@ -5,12 +5,10 @@ spring:
     ollama:
       base-url: http://ollama:11434/
       chat:
-        options:
-          model: qwen2.5:1.5b
-          temperature: 0.7
+        model: qwen2.5:1.5b
+        temperature: 0.7
       embedding:
-        options:
-          model: embeddinggemma
+        model: embeddinggemma
       init:
         pull-model-strategy: never
 
@@ -22,7 +20,8 @@ spring:
         streamable-http:
           connections:
             server1:
-              url: https://gitmcp.io/spring-projects/spring-ai
+              url: https://gitmcp.io
+              endpoint: /spring-projects/spring-ai
 
     vectorstore:
       pgvector:

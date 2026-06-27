@@ -2,6 +2,7 @@ package com.hibuz.ai.controller;
 
 import java.lang.reflect.Method;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 
@@ -37,6 +38,8 @@ import lombok.extern.slf4j.Slf4j;
     url = "https://docs.spring.io/spring-ai/reference/concepts.html#concept-fc"))
 public class ToolController {
 
+    private static final String CHAT_LOG_PREFIX = "chat> {}";
+
     private final ChatClientService service;
     private final ToolCallback[] toolCallbacks;
 
@@ -64,27 +67,27 @@ public class ToolController {
 
     @GetMapping("4-2/bean")
     public ChatResponse bean(@RequestParam(defaultValue = "What's the weather like in Seoul?") String message) {
-        log.info("chat> {}", message);
-        
-        return service.getClient().prompt(message).toolNames("currentWeather")
+        log.info(CHAT_LOG_PREFIX, message);
+
+        return service.getClient().prompt(message).tools("currentWeather")
         .call().chatResponse();
     }
 
     @GetMapping("4-3/function")
     public ChatResponse function(@RequestParam(defaultValue = "What's the weather like in Seoul in fahrenheit?") String message) {
-        log.info("chat> {}", message);
+        log.info(CHAT_LOG_PREFIX, message);
 
         ToolCallback toolCallback = FunctionToolCallback
             .builder("currentWeather", new WeatherTools())
             .inputType(WeatherTools.Request.class)
             .build();
 
-        return service.getClient().prompt(message).toolCallbacks(toolCallback).call().chatResponse();
+        return service.getClient().prompt(message).tools(toolCallback).call().chatResponse();
     }
 
     @GetMapping("4-4/method")
     public ChatResponse method(@RequestParam(defaultValue = "What's the weather like in Seoul, Paris and San Francisco? in Celsius") String message) {
-        log.info("chat> {}", message);
+        log.info(CHAT_LOG_PREFIX, message);
 
         Method method = Arrays.stream(WeatherTools.class.getMethods()).filter(m -> "getWeatherStatic".equals(m.getName())).findFirst().get();
 
@@ -96,7 +99,7 @@ public class ToolController {
             .toolMethod(method)
             .build();
 
-        return service.getClient().prompt(message).toolCallbacks(toolCallback).call().chatResponse();
+        return service.getClient().prompt(message).tools(toolCallback).call().chatResponse();
     }
 
     @SuppressWarnings("null")
@@ -104,11 +107,11 @@ public class ToolController {
     public Generation mcp(@RequestParam(defaultValue = "qwen2.5-coder:1.5b") String modelName,
                             @RequestParam(defaultValue = "spring-ai github 프로젝트의 UserMessageTests.java 를 찾아서 비슷하게 채팅 테스트코드 작성해줘") String message,
                             @RequestParam(defaultValue = "false") boolean useMcpClient) {
-        log.info("chat> {}", message);
+        log.info(CHAT_LOG_PREFIX, message);
 
         if (useMcpClient) {
-            ChatOptions.Builder builder = ChatOptions.builder().model(modelName).temperature(0.7);
-            return service.getClient().prompt(message).options(builder).toolCallbacks(toolCallbacks).call().chatResponse().getResult();
+            ChatOptions.Builder<?> builder = ChatOptions.builder().model(modelName).temperature(0.7);
+            return service.getClient().prompt(message).options(builder).tools((Object[]) toolCallbacks).call().chatResponse().getResult();
         } else {
             return service.getClient().prompt(message).call().chatResponse().getResult();
         }
@@ -119,7 +122,7 @@ public class ToolController {
 
         @Tool(description = "Get the current date and time in the user's timezone")
         String getCurrentDateTime() {
-            return LocalDateTime.now().atZone(LocaleContextHolder.getTimeZone().toZoneId()).toString();
+            return ZonedDateTime.now(LocaleContextHolder.getTimeZone().toZoneId()).toString();
         }
 
         @Tool(description = "Set a user alarm for the given time")
